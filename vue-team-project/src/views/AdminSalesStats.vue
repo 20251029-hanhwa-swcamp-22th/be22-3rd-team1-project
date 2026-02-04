@@ -2,7 +2,10 @@
 import { ref, onMounted, computed } from 'vue'
 import { api } from '../services/api'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
+const { t, locale } = useI18n()
 const router = useRouter()
 
 const orders = ref([])
@@ -32,7 +35,7 @@ const refreshData = async () => {
     menuItems.value = menuData
   } catch (error) {
     console.error('Failed to fetch sales data:', error)
-    errorMessage.value = '매출 데이터를 불러오는 데 실패했습니다.'
+    errorMessage.value = t('sales.fetch_fail')
   } finally {
     isLoading.value = false
   }
@@ -40,7 +43,7 @@ const refreshData = async () => {
 
 const getCategoryName = (categoryId) => {
   const category = categories.value.find(cat => cat.id === categoryId)
-  return category ? category.name : '알 수 없음'
+  return category ? (category.name[locale.value] || category.name) : t('admin.unknown')
 }
 
 // 1. 총 매출
@@ -70,7 +73,13 @@ const salesByMenuItem = computed(() => {
   const stats = {}
   orders.value.forEach(order => {
     order.items.forEach(item => {
-      const baseName = item.name.split('(')[0].trim()
+      let baseName = ''
+      if (typeof item.name === 'object') {
+        baseName = item.name[locale.value] || item.name['ko'] || 'Unknown'
+      } else {
+        baseName = item.name.split('(')[0].trim()
+      }
+      
       if (!stats[baseName]) stats[baseName] = 0
       stats[baseName] += item.price * item.quantity
     })
@@ -83,7 +92,8 @@ const overallTopSizes = computed(() => {
   const stats = {}
   orders.value.forEach(order => {
     order.items.forEach(item => {
-      const match = item.name.match(/\(([^,)]+)/)
+      const nameStr = typeof item.name === 'object' ? (item.name[locale.value] || item.name['ko'] || '') : item.name;
+      const match = nameStr.match(/\(([^,)]+)/)
       if (match) {
         const size = match[1].trim()
         if (['Regular', 'Large'].includes(size)) {
@@ -100,7 +110,8 @@ const overallTopAddOns = computed(() => {
   const stats = {}
   orders.value.forEach(order => {
     order.items.forEach(item => {
-      const match = item.name.match(/\(([^)]+)\)/)
+      const nameStr = typeof item.name === 'object' ? (item.name[locale.value] || item.name['ko'] || '') : item.name;
+      const match = nameStr.match(/\(([^)]+)\)/)
       if (match) {
         const parts = match[1].split(',').map(p => p.trim())
         parts.slice(1).forEach(addOn => {
@@ -124,18 +135,25 @@ const selectedMenuDetails = computed(() => {
 
   orders.value.forEach(order => {
     order.items.forEach(item => {
-      const baseName = item.name.split('(')[0].trim()
+      let baseName = ''
+      const nameStr = typeof item.name === 'object' ? (item.name[locale.value] || item.name['ko'] || '') : item.name
+      
+      if (typeof item.name === 'object') {
+        baseName = nameStr.split('(')[0].trim()
+      } else {
+        baseName = item.name.split('(')[0].trim()
+      }
 
       if (baseName === selectedMenuName.value) {
         totalCount += item.quantity
-        const sizeMatch = item.name.match(/\(([^,)]+)/)
+        const sizeMatch = nameStr.match(/\(([^,)]+)/)
         if (sizeMatch) {
           const size = sizeMatch[1].trim()
           if (['Regular', 'Large'].includes(size)) {
             sizeStats[size] = (sizeStats[size] || 0) + item.quantity
           }
         }
-        const addOnMatch = item.name.match(/\(([^)]+)\)/)
+        const addOnMatch = nameStr.match(/\(([^)]+)\)/)
         if (addOnMatch) {
           const parts = addOnMatch[1].split(',').map(p => p.trim())
           parts.slice(1).forEach(addOn => {
@@ -168,30 +186,32 @@ const goToDashboard = () => {
 <template>
   <div class="admin-sales-stats">
     <header class="admin-header">
-      <h1>매출 통계</h1>
-      <button @click="goToDashboard" class="back-btn">대시보드로</button>
+      <h1>{{ $t('sales.title') }}</h1>
+      <div class="header-right">
+        <LanguageSwitcher mode="inline" variant="dark" />
+        <button @click="goToDashboard" class="back-btn">{{ $t('admin.back_to_dashboard') }}</button>
+      </div>
     </header>
 
     <div class="content-area">
       <p v-if="errorMessage" class="error-message-banner">{{ errorMessage }}</p>
 
-      <div v-if="isLoading" class="loading-spinner">매출 데이터를 불러오는 중...</div>
+      <div v-if="isLoading" class="loading-spinner">{{ $t('sales.fetching_data') }}</div>
       <div v-else class="stats-container">
 
         <!-- 섹션 1: 요약 정보 -->
         <div class="stats-grid summary-section">
           <div class="stat-card total-sales">
-            <h3>총 매출</h3>
-            <p class="stat-value">{{ totalSales.toLocaleString() }}원</p>
-            <p class="stat-count">총 주문 건수: {{ orders.length }}건</p>
+            <h3>{{ $t('sales.total_sales') }}</h3>
+            <p class="stat-value">{{ totalSales.toLocaleString() }}{{ $t('common.won') }}</p>
+            <p class="stat-count">{{ $t('sales.total_orders', { count: orders.length }) }}</p>
           </div>
-
           <div class="stat-card">
-            <h3>카테고리별 매출</h3>
+            <h3>{{ $t('sales.category_sales') }}</h3>
             <ul>
               <li v-for="[category, sales] in salesByCategory" :key="category">
                 <span>{{ category }}</span>
-                <span>{{ sales.toLocaleString() }}원</span>
+                <span>{{ sales.toLocaleString() }}{{ $t('common.won') }}</span>
               </li>
             </ul>
           </div>
@@ -200,24 +220,24 @@ const goToDashboard = () => {
         <!-- 섹션 2: 전체 옵션 통계 (복구된 기능) -->
         <div class="stats-grid overall-options-section">
           <div class="stat-card">
-            <h3>전체 인기 사이즈 (피자)</h3>
+            <h3>{{ $t('sales.top_sizes') }}</h3>
             <ul>
               <li v-for="[size, count] in overallTopSizes" :key="size">
                 <span>{{ size }}</span>
-                <span>{{ count }}회 선택</span>
+                <span>{{ $t('sales.times_selected', { count: count }) }}</span>
               </li>
-              <li v-if="overallTopSizes.length === 0" class="no-data">데이터 없음</li>
+              <li v-if="overallTopSizes.length === 0" class="no-data">{{ $t('sales.no_data') }}</li>
             </ul>
           </div>
 
           <div class="stat-card">
-            <h3>전체 인기 추가 토핑 (피자)</h3>
+            <h3>{{ $t('sales.top_addons') }}</h3>
             <ul>
               <li v-for="[addOn, count] in overallTopAddOns" :key="addOn">
                 <span>{{ addOn }}</span>
-                <span>{{ count }}회 선택</span>
+                <span>{{ $t('sales.times_selected', { count: count }) }}</span>
               </li>
-              <li v-if="overallTopAddOns.length === 0" class="no-data">데이터 없음</li>
+              <li v-if="overallTopAddOns.length === 0" class="no-data">{{ $t('sales.no_data') }}</li>
             </ul>
           </div>
         </div>
@@ -226,7 +246,7 @@ const goToDashboard = () => {
         <div class="stats-grid detail-analysis-section">
           <!-- 메뉴 목록 -->
           <div class="stat-card">
-            <h3>메뉴별 매출 (클릭하여 상세 분석)</h3>
+            <h3>{{ $t('sales.menu_sales_detail') }}</h3>
             <ul class="clickable-list">
               <li
                 v-for="[menu, sales] in salesByMenuItem"
@@ -235,7 +255,7 @@ const goToDashboard = () => {
                 @click="selectMenu(menu)"
               >
                 <span>{{ menu }}</span>
-                <span>{{ sales.toLocaleString() }}원</span>
+                <span>{{ sales.toLocaleString() }}{{ $t('common.won') }}</span>
               </li>
             </ul>
           </div>
@@ -243,37 +263,37 @@ const goToDashboard = () => {
           <!-- 선택 메뉴 상세 -->
           <div class="stat-card detail-card" v-if="selectedMenuName">
             <div class="detail-header">
-              <h3>[{{ selectedMenuDetails.name }}] 옵션 분석</h3>
+              <h3>{{ $t('sales.option_analysis', { name: selectedMenuDetails.name }) }}</h3>
               <button class="close-detail" @click="selectedMenuName = null">×</button>
             </div>
 
             <div class="detail-content">
               <div class="detail-section">
-                <h4>사이즈 선택 비중</h4>
+                <h4>{{ $t('sales.size_ratio') }}</h4>
                 <ul>
                   <li v-for="[size, count] in selectedMenuDetails.sizes" :key="size">
                     <span>{{ size }}</span>
-                    <span>{{ count }}회 ({{ Math.round(count/selectedMenuDetails.totalCount * 100) }}%)</span>
+                    <span>{{ $t('sales.ratio_format', { count: count, ratio: Math.round(count/selectedMenuDetails.totalCount * 100) }) }}</span>
                   </li>
-                  <li v-if="selectedMenuDetails.sizes.length === 0" class="no-data">정보 없음</li>
+                  <li v-if="selectedMenuDetails.sizes.length === 0" class="no-data">{{ $t('sales.no_info') }}</li>
                 </ul>
               </div>
 
               <div class="detail-section">
-                <h4>인기 추가 토핑</h4>
+                <h4>{{ $t('sales.popular_addons') }}</h4>
                 <ul>
                   <li v-for="[addOn, count] in selectedMenuDetails.addOns" :key="addOn">
                     <span>{{ addOn }}</span>
-                    <span>{{ count }}회</span>
+                    <span>{{ $t('sales.times_selected', { count: count }) }}</span>
                   </li>
-                  <li v-if="selectedMenuDetails.addOns.length === 0" class="no-data">정보 없음</li>
+                  <li v-if="selectedMenuDetails.addOns.length === 0" class="no-data">{{ $t('sales.no_info') }}</li>
                 </ul>
               </div>
             </div>
           </div>
 
           <div class="stat-card info-card" v-else>
-            <p>위의 메뉴 목록에서 메뉴를 선택하면<br>해당 메뉴의 상세 옵션 통계를 확인할 수 있습니다.</p>
+            <p v-html="$t('sales.select_menu_prompt').replace('\n', '<br>')"></p>
           </div>
         </div>
 
@@ -296,28 +316,38 @@ const goToDashboard = () => {
   justify-content: space-between;
   align-items: center;
   padding: 20px 40px;
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red-dark);
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .admin-header h1 {
   margin: 0;
   font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .back-btn {
-  padding: 10px 20px;
-  background-color: #6c757d;
+  padding: 10px 24px;
+  background-color: rgba(255, 255, 255, 0.1);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
 .back-btn:hover {
-  background-color: #5a6268;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: white;
 }
 
 .content-area {
@@ -344,22 +374,26 @@ const goToDashboard = () => {
   padding: 25px;
   display: flex;
   flex-direction: column;
+  min-height: 220px;
 }
 
 .stat-card h3 {
-  color: var(--primary-blue);
-  font-size: 18px;
-  margin-bottom: 15px;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 10px;
+  color: var(--primary-red);
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--border-subtle);
+  padding-bottom: 12px;
   margin-top: 0;
+  letter-spacing: -0.5px;
 }
 
 .stat-card .stat-value {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--primary-green);
-  margin-top: 10px;
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--primary-red-dark);
+  margin-top: 12px;
+  letter-spacing: -1px;
 }
 
 .stat-count {
@@ -401,12 +435,13 @@ const goToDashboard = () => {
 }
 
 .clickable-list li:hover {
-  background-color: #f0f7ff;
+  background-color: #fff5f5;
 }
 
 .clickable-list li.active {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: white;
+  box-shadow: var(--shadow-md);
 }
 
 .clickable-list li.active span:last-child {
@@ -415,7 +450,8 @@ const goToDashboard = () => {
 
 /* 상세 카드 스타일 */
 .detail-card {
-  border: 2px solid var(--primary-blue);
+  border: 1px solid var(--primary-red);
+  background-color: #fff5f5;
 }
 
 .detail-header {

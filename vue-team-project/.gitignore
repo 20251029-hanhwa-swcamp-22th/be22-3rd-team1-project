@@ -40,3 +40,4 @@ __screenshots__/
 *.timestamp-*-*.mjs
 
 package-lock.json
+.env

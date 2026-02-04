@@ -22,12 +22,12 @@ const goHome = () => {
     <div class="fail-card">
       <div class="icon-area">⚠️</div>
 
-      <h1>결제 실패</h1>
+      <h1>{{ $t('fail.title') }}</h1>
       <p class="reason-text">{{ failReason }}</p>
 
       <div class="btn-group">
-        <button class="btn retry" @click="goRetry">다시 결제하기</button>
-        <button class="btn home" @click="goHome">처음으로</button>
+        <button class="btn retry" @click="goRetry">{{ $t('fail.retry_btn') }}</button>
+        <button class="btn home" @click="goHome">{{ $t('fail.home_btn') }}</button>
       </div>
     </div>
   </div>
@@ -36,7 +36,7 @@ const goHome = () => {
 <style scoped>
 .fail-page {
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: var(--background-cream);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -48,10 +48,10 @@ const goHome = () => {
   padding: 40px;
   border-radius: 20px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 450px;
-  border-top: 5px solid #ff5252;
+  border-top: 5px solid var(--primary-red);
 }
 
 .icon-area {
@@ -90,7 +90,7 @@ h1 {
 }
 
 .retry {
-  background-color: var(--primary-blue, #4fc3f7);
+  background-color: var(--primary-red);
   color: white;
 }
 

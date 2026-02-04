@@ -197,3 +197,5 @@ Currently using local `ref()` state within components. For production:
 **Generated:** 2026-02-01
 **Framework:** Vue 3 + Vite
 **Router:** Vue Router 4
+
+ee
