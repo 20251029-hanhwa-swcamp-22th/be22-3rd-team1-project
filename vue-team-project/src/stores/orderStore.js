@@ -55,6 +55,17 @@ export const useOrderStore = defineStore('order', {
       this.usedPoints = amount
     },
 
+    addCombo(combo) {
+      combo.items.forEach(item => {
+        this.addItem({
+          ...item,
+          quantity: 1,
+          selectedOptions: {},
+          options: []
+        })
+      })
+    },
+
     clearOrder() {
       this.orderList = []
       this.selectedPaymentMethod = null

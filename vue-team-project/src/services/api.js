@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL
+const API_BASE_URL = 'http://localhost:3000'
 
 export const api = {
 
@@ -9,6 +9,11 @@ export const api = {
 
   async getMenuItems() {
     const response = await fetch(`${API_BASE_URL}/menuItems`)
+    return response.json()
+  },
+
+  async getRecommendations() {
+    const response = await fetch(`${API_BASE_URL}/recommendations`)
     return response.json()
   },
 
