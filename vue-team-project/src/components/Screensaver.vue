@@ -1,8 +1,13 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-
 const show = ref(false)
 const currentImageIndex = ref(1)
+
+// 화면보호기 기능추가를위해 가져옴
+import { useRouter } from 'vue-router'
+import { useOrderStore } from '../stores/orderStore'
+const router = useRouter()
+const orderStore = useOrderStore()
 
 let activationTimer = null
 let slideshowInterval = null
@@ -17,8 +22,17 @@ const reset = () => {
   // 2. 화면보호기 끄기 (터치 시 즉시 사라짐)
   show.value = false
 
-  // 3. 다시 10초 카운트다운 시작
+ /* // 3. 다시 10초 카운트다운 시작
   activationTimer = setTimeout(() => {
+    show.value = true
+    currentImageIndex.value = 1*/
+
+  activationTimer = setTimeout(() => {
+
+    // Pinia 스토어를 사용하여 장바구니 초기화 및 메인 이동
+    orderStore.clearOrder() 
+    router.replace('/')
+
     show.value = true
     currentImageIndex.value = 1
 
@@ -27,7 +41,7 @@ const reset = () => {
       currentImageIndex.value = (currentImageIndex.value % 5) + 1
     }, 5000)
 
-  }, 10000)
+  }, 300000)
 }
 
 onMounted(() => {
@@ -53,8 +67,8 @@ onUnmounted(() => {
       />
 
       <div class="text-container">
-        <h1 class="animate-pulse">터치하여 주문하기</h1>
-        <p>Touch screen to order</p>
+        <h1 class="animate-pulse">{{ $t('screensaver.touch_to_order') }}</h1>
+        <p>{{ $t('screensaver.touch_screen') }}</p>
       </div>
     </div>
   </Transition>

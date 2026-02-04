@@ -86,6 +86,30 @@ const handlePay = async () => {
 
     await api.createOrder(orderData)
 
+    // 재고 차감 로직 추가
+    // 각 주문 항목에 대해 재고 업데이트 수행
+    await Promise.all(orderItems.value.map(async (item) => {
+      // item.id가 "1_..." 형태일 수 있으므로 원본 ID 추출
+      const originalId = item.id.toString().split('_')[0]
+
+      try {
+        // 현재 메뉴 정보 가져오기 (최신 재고 확인)
+        // api.js에 getMenuItemById가 없으므로 fetch 직접 사용하거나 api.getMenuItems()에서 찾음
+        // 여기서는 fetch 직접 사용 (JSON Server URL 가정)
+        const response = await fetch(`http://localhost:3000/menuItems/${originalId}`)
+        if (response.ok) {
+          const menuData = await response.json()
+          if (menuData.stock !== undefined) {
+            const newStock = menuData.stock - item.quantity
+            // 재고가 0보다 작아지지 않도록 처리 (품절 상태로 0)
+            await api.updateMenuItemStock(originalId, Math.max(0, newStock))
+          }
+        }
+      } catch (err) {
+        console.error(`Failed to update stock for item ${originalId}:`, err)
+      }
+    }))
+
     // 회원이 결제한 경우 포인트 업데이트
     const currentMember = orderStore.currentMember
     if (currentMember) {
@@ -275,7 +299,7 @@ const handleComplete = () => {
 
 .payment-badge {
   padding: 10px 20px;
-  background-color: var(&#45;&#45;primary-blue);
+  background-color: var(--primary-red);
   color: white;
   border-radius: 8px;
   font-size: 14px;
@@ -291,7 +315,7 @@ const handleComplete = () => {
 }
 
 .menu-list-container {
-  background-color: var(&#45;&#45;primary-blue);
+  background-color: var(--primary-red-dark);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -333,7 +357,7 @@ const handleComplete = () => {
   justify-content: space-between;
   align-items: center;
   padding: 16px;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: var(--primary-red-dark);
   color: white;
 }
 
@@ -367,21 +391,21 @@ const handleComplete = () => {
 }
 
 .footer-btn.cancel {
-  background-color: var(&#45;&#45;primary-blue);
+  background-color: var(--primary-red);
   color: white;
 }
 
 .footer-btn.cancel:hover {
-  background-color: var(&#45;&#45;primary-blue-dark);
+  background-color: var(--primary-red-dark);
 }
 
 .footer-btn.pay {
-  background-color: var(&#45;&#45;primary-blue);
+  background-color: var(--primary-red);
   color: white;
 }
 
 .footer-btn.pay:hover {
-  background-color: var(&#45;&#45;primary-blue-dark);
+  background-color: var(--primary-red-dark);
 }
 
 .footer-btn:active {
@@ -422,15 +446,25 @@ const handleComplete = () => {
 
 
 <script setup>
-import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useOrderStore } from '../stores/orderStore'
+import { useI18n } from 'vue-i18n'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
+const { locale } = useI18n()
 const router = useRouter()
 const orderStore = useOrderStore()
 
 // 스토어에서 데이터 가져오기 (화면 표시용)
-const selectedPaymentMethod = computed(() => orderStore.selectedPaymentMethod || '카드결제')
+const selectedPaymentMethod = computed(() => {
+  const method = orderStore.selectedPaymentMethod
+  if (!method) return '카드결제'
+  if (typeof method === 'object') {
+    return method[locale.value] || method['ko']
+  }
+  return method
+})
 const orderItems = computed(() => orderStore.orderList)
 const totalPrice = computed(() => orderStore.calculatedTotalPrice)
 const totalDiscount = computed(() => orderStore.totalDiscount)
@@ -454,18 +488,19 @@ const handlePay = () => {
 
 <template>
   <div class="payment-confirm-page">
+    <LanguageSwitcher />
     <header class="page-header">
-      <h1>결제 확인</h1>
+      <h1>{{ $t('confirm.title') }}</h1>
     </header>
 
     <div class="page-content">
       <div class="info-section payment-method-section">
-        <span class="section-label">Payment :</span>
+        <span class="section-label">{{ $t('payment.payment_method') }} :</span>
         <span class="payment-badge">{{ selectedPaymentMethod }}</span>
       </div>
 
       <div class="info-section menu-list-section">
-        <span class="section-label">Menu :</span>
+        <span class="section-label">{{ $t('confirm.menu_label') }}</span>
 
         <div class="menu-list-container">
           <div class="menu-list">
@@ -474,26 +509,26 @@ const handlePay = () => {
                 :key="item.id"
                 class="menu-item"
             >
-              <span class="menu-name">{{ item.name }}</span>
+              <span class="menu-name">{{ item.name[$i18n.locale] || item.name }}</span>
               <span class="menu-qty">x{{ item.quantity }}</span>
-              <span class="menu-price">{{ (item.price * item.quantity).toLocaleString() }}원</span>
+              <span class="menu-price">{{ (item.price * item.quantity).toLocaleString() }}{{ $t('common.won') }}</span>
             </div>
           </div>
 
           <div class="total-row raw-total">
-            <span class="total-label">total items :</span>
-            <span class="total-value">{{ totalPrice.toLocaleString() }}원</span>
+            <span class="total-label">{{ $t('confirm.total_items') }}</span>
+            <span class="total-value">{{ totalPrice.toLocaleString() }}{{ $t('common.won') }}</span>
           </div>
           <div v-if="totalDiscount > 0" class="total-row discount-row">
-            <span class="total-label">discount :</span>
-            <span class="total-value">- {{ totalDiscount.toLocaleString() }}원</span>
+            <span class="total-label">{{ $t('confirm.discount') }}</span>
+            <span class="total-value">- {{ totalDiscount.toLocaleString() }}{{ $t('common.won') }}</span>
           </div>
           <div class="total-row final-total">
-            <span class="total-label">total payment :</span>
-            <span class="total-value">{{ finalPrice.toLocaleString() }}원</span>
+            <span class="total-label">{{ $t('confirm.total_payment') }}</span>
+            <span class="total-value">{{ finalPrice.toLocaleString() }}{{ $t('common.won') }}</span>
           </div>
           <div v-if="orderStore.currentMember" class="total-row earned-points-row">
-            <span class="total-label">earned points :</span>
+            <span class="total-label">{{ $t('confirm.earned_points') }} :</span>
             <span class="total-value">+ {{ earnedPoints.toLocaleString() }}P</span>
           </div>
         </div>
@@ -502,10 +537,10 @@ const handlePay = () => {
 
     <footer class="action-footer">
       <button class="footer-btn cancel" @click="handleCancel">
-        취소
+        {{ $t('common.cancel') }}
       </button>
       <button class="footer-btn pay" @click="handlePay">
-        결제
+        {{ $t('common.pay') }}
       </button>
     </footer>
 
@@ -568,12 +603,14 @@ const handlePay = () => {
 }
 
 .payment-badge {
-  padding: 10px 20px;
-  background-color: var(--primary-blue);
-  color: white;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
+  padding: 10px 24px;
+  background-color: #fff5f5;
+  color: var(--primary-red);
+  border: 1px solid var(--primary-red);
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
 }
 
 /* Menu List Section */
@@ -585,9 +622,11 @@ const handlePay = () => {
 }
 
 .menu-list-container {
-  background-color: var(--primary-blue);
-  border-radius: 12px;
+  background-color: var(--surface-white);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
   overflow: hidden;
+  box-shadow: var(--shadow-md);
 }
 
 .menu-list {
@@ -599,10 +638,10 @@ const handlePay = () => {
 .menu-item {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
-  padding: 12px 0;
-  color: white;
-  font-size: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 16px;
+  color: var(--text-dark);
+  font-size: 15px;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .menu-item:last-child {
@@ -626,18 +665,35 @@ const handlePay = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  background-color: rgba(0, 0, 0, 0.1);
-  color: white;
+  padding: 16px 20px;
+  background-color: var(--background-cream);
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-subtle);
 }
 
 .total-label {
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .total-value {
   font-size: 20px;
   font-weight: 700;
+  color: var(--text-navy);
+}
+
+.final-total {
+  background-color: #fff5f5;
+}
+
+.final-total .total-label {
+  color: var(--primary-red);
+  font-weight: 800;
+}
+
+.final-total .total-value {
+  color: var(--primary-red-dark);
+  font-size: 24px;
 }
 
 /* Action Footer */
@@ -652,30 +708,37 @@ const handlePay = () => {
 .footer-btn {
   flex: 1;
   padding: 20px 24px;
+  min-height: 80px;
   border: none;
   border-radius: 12px;
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .footer-btn.cancel {
-  background-color: var(--primary-blue);
-  color: white;
+  background-color: var(--surface-white);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
 }
 
 .footer-btn.cancel:hover {
-  background-color: var(--primary-blue-dark);
+  background-color: var(--background-light);
 }
 
 .footer-btn.pay {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: white;
+  box-shadow: var(--shadow-md);
 }
 
 .footer-btn.pay:hover {
-  background-color: var(--primary-blue-dark);
+  background-color: var(--primary-red-dark);
+  transform: translateY(-2px);
 }
 
 .footer-btn:active {

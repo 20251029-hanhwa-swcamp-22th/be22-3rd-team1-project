@@ -1,6 +1,12 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 
+const { t, locale } = useI18n();
+
+const router = useRouter();
+const route = useRoute();
 const props = defineProps({
   menu: {
     type: Object,
@@ -22,19 +28,25 @@ const totalPrice = computed(() => {
   let base = props.menu.price
   
   props.menu.options?.forEach(opt => {
-
-    const selected = selectedOptions.value[opt.name]
+    const optName = typeof opt.name === 'object' ? opt.name.ko : opt.name;
+    const selected = selectedOptions.value[optName]
 
     if (!selected) return
     
     if (opt.multiple) {
       selected.forEach(label => {
-        const choice = opt.choices.find(c => c.label === label)
+        const choice = opt.choices.find(c => {
+          const choiceLabelKo = typeof c.label === 'object' ? c.label.ko : c.label;
+          return choiceLabelKo === label || c.label === label;
+        })
         if (choice) base += choice.price
       })
     } 
     else {
-      const choice = opt.choices.find(c => c.label === selected)
+      const choice = opt.choices.find(c => {
+        const choiceLabelKo = typeof c.label === 'object' ? c.label.ko : c.label;
+        return choiceLabelKo === selected || c.label === selected;
+      })
       if (choice) base += choice.price
     }
   })
@@ -43,17 +55,23 @@ const totalPrice = computed(() => {
 })
 
 onMounted(() => {
-   props.menu.options?.forEach(option => {
-    if(option.required){
-      selectedOptions.value[option.name] = option.choices[0].label;
+  props.menu.options?.forEach(option => {
+    const optName = typeof option.name === 'object' ? option.name.ko : option.name;
+    if (option.required) {
+      const choiceLabel = typeof option.choices[0].label === 'object' ? option.choices[0].label.ko : option.choices[0].label;
+      selectedOptions.value[optName] = choiceLabel;
+    } else if (option.multiple) {
+      selectedOptions.value[optName] = [];
     }
-  else if(option.multiple){
-    selectedOptions.value[option.name] = [];
-  }
-})
+  })
 })
 
 const increaseQuantity = () => {
+  // 재고 체크
+  if (props.menu.stock !== undefined && quantity.value >= props.menu.stock) {
+    alert(t('order.low_stock_alert', { count: props.menu.stock }))
+    return
+  }
   quantity.value++
 }
 
@@ -86,31 +104,34 @@ const handleAdd = () => {
 
   // 옵션 선택 처리 함수
 const handleOptionSelect = (option, choice) => {
+  const optName = typeof option.name === 'object' ? option.name.ko : option.name;
+  const choiceLabel = typeof choice.label === 'object' ? choice.label.ko : choice.label;
+
   if (option.required) {
-    // 필수 옵션: 기존 값을 덮어씀
-    selectedOptions.value[option.name] = choice.label;
+    selectedOptions.value[optName] = choiceLabel;
   } else if (option.multiple) {
-    // 다중 선택 옵션: 배열에 추가하거나 제거
-    const current = selectedOptions.value[option.name] || [];
-    const index = current.indexOf(choice.label);
+    const current = selectedOptions.value[optName] || [];
+    const index = current.indexOf(choiceLabel);
     
     if (index > -1) {
       current.splice(index, 1);
     } else {
-      current.push(choice.label);
+      current.push(choiceLabel);
     }
-    selectedOptions.value[option.name] = current;
+    selectedOptions.value[optName] = current;
   }
 };
 // 선택 여부 확인 함수 (isSelected)
 const isSelected = (option, choice) => {
-  const selected = selectedOptions.value[option.name];
+  const optName = typeof option.name === 'object' ? option.name.ko : option.name;
+  const choiceLabel = typeof choice.label === 'object' ? choice.label.ko : choice.label;
+  const selected = selectedOptions.value[optName];
   if (!selected) return false;
   
   if (option.required) {
-    return selected === choice.label;
+    return selected === choiceLabel;
   } else {
-    return selected.includes(choice.label);
+    return selected.includes(choiceLabel);
   }
 };
 
@@ -140,16 +161,16 @@ const getCategoryIcon = (categoryId) => {
 
         <!-- Menu Info -->
         <div class="menu-info">
-          <h2 class="menu-name">{{ menu.name }}</h2>
-          <p class="menu-description">{{ menu.description }}</p>
+          <h2 class="menu-name">{{ menu.name[$i18n.locale] || menu.name }}</h2>
+          <p class="menu-description">{{ menu.description[$i18n.locale] || menu.description }}</p>
           <!-- <p class="menu-price">{{ menu.price?.toLocaleString() }}원</p> -->
-           <p class="menu-price">{{ totalPrice?.toLocaleString() }}원</p>
+           <p class="menu-price">{{ totalPrice?.toLocaleString() }}{{ $t('common.won') }}</p>
         </div>
 
         <!-- Options -->
         <div class="options-container">
-          <div v-for="option in menu.options" :key="option.name" class="option-group">
-            <h3>{{ option.name }} ({{ option.required ? '필수' : '선택' }})</h3>
+          <div v-for="option in menu.options" :key="option.name[$i18n.locale] || option.name" class="option-group">
+            <h3>{{ option.name[$i18n.locale] || option.name }} ({{ option.required ? $t('admin.required') : $t('order.optional') }})</h3>
             
             <div class="option-grid">
               <div 
@@ -164,8 +185,8 @@ const getCategoryIcon = (categoryId) => {
                   <span v-else class="placeholder">{{ getCategoryIcon(menu.category) }}</span>
                 </div>
                 <div class="option-card-info">
-                  <div>{{ choice.label }}</div>
-                  <div>+{{ choice.price?.toLocaleString() }}원</div>
+                  <div class="choice-label">{{ choice.label[$i18n.locale] || choice.label }}</div>
+                  <div class="choice-price">+{{ choice.price?.toLocaleString() }}{{ $t('common.won') }}</div>
                 </div>
               </div>
             </div>
@@ -176,16 +197,23 @@ const getCategoryIcon = (categoryId) => {
         <div class="quantity-controls">
           <button class="quantity-btn" @click="decreaseQuantity">-</button>
           <span class="quantity-value">{{ quantity }}</span>
-          <button class="quantity-btn" @click="increaseQuantity">+</button>
+          <button
+            class="quantity-btn"
+            @click="increaseQuantity"
+            :disabled="menu.stock !== undefined && quantity >= menu.stock"
+          >+</button>
         </div>
+        <p v-if="menu.stock !== undefined" class="stock-info">
+          {{ $t('order.remaining_stock', { count: menu.stock }) }}
+        </p>
 
         <!-- Action Buttons -->
         <div class="modal-actions">
           <button class="action-btn cancel-btn" @click="handleCancel">
-            취소
+            {{ $t('common.cancel') }}
           </button>
           <button class="action-btn add-btn" @click="handleAdd">
-            담기
+            {{ $t('order.add_to_cart') }}
           </button>
         </div>
       </div>
@@ -200,30 +228,33 @@ const getCategoryIcon = (categoryId) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   padding: 20px;
+  backdrop-filter: blur(4px);
 }
 
 .modal-content {
-  background-color: #f0c14b;
-  border-radius: 16px;
+  background-color: var(--surface-white);
+  border-radius: 24px;
   width: 100%;
-  max-width: 400px;
+  max-width: 440px;
   max-height: 90vh;  
   display: flex;
   flex-direction: column; 
   overflow: hidden;
-  animation: modalSlideIn 0.3s ease;
+  animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-subtle);
 }
 
 @keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: scale(0.9) translateY(20px);
+    transform: scale(0.95) translateY(20px);
   }
   to {
     opacity: 1;
@@ -233,8 +264,8 @@ const getCategoryIcon = (categoryId) => {
 
 .menu-image {
   width: 100%;
-  height: 200px;
-  background-color: var(--primary-blue);
+  height: 220px;
+  background-color: #fff5f5;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -248,50 +279,55 @@ const getCategoryIcon = (categoryId) => {
 }
 
 .menu-placeholder-icon {
-  font-size: 64px;
+  font-size: 80px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .menu-info {
-  padding: 20px;
+  padding: 24px;
   text-align: center;
+  border-bottom: 1px solid var(--border-subtle);
 }
 
 .menu-name {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--text-dark);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--primary-red);
   margin-bottom: 8px;
+  letter-spacing: -0.5px;
 }
 
 .menu-description {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 12px;
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.4;
 }
 
 .menu-price {
-  font-size: 20px;
-  font-weight: 600;
-  color: var(--text-dark);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--primary-red-dark);
 }
 
 .quantity-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  padding: 16px;
-  background-color: rgba(255, 255, 255, 0.3);
+  gap: 24px;
+  padding: 20px;
+  background-color: var(--background-light);
 }
 
 .quantity-btn {
-  width: 40px;
-  height: 40px;
-  border: 2px solid #333;
-  border-radius: 8px;
-  background-color: white;
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--primary-red);
+  border-radius: 12px;
+  background-color: var(--surface-white);
+  color: var(--primary-red);
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -299,58 +335,83 @@ const getCategoryIcon = (categoryId) => {
   justify-content: center;
 }
 
-.quantity-btn:hover {
-  background-color: #f5f5f5;
+.quantity-btn:hover:not(:disabled) {
+  background-color: var(--primary-red);
+  color: white;
 }
 
-.quantity-btn:active {
+.quantity-btn:active:not(:disabled) {
   transform: scale(0.95);
 }
 
+.quantity-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  border-color: #ccc;
+  color: #ccc;
+}
+
 .quantity-value {
-  font-size: 28px;
-  font-weight: 700;
-  min-width: 40px;
+  font-size: 32px;
+  font-weight: 800;
+  min-width: 48px;
   text-align: center;
+  color: var(--primary-red);
+}
+
+.stock-info {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #dc3545;
+  margin-top: 8px;
+  margin-bottom: 12px;
+  padding: 6px;
 }
 
 .modal-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   gap: 12px;
-  padding: 16px;
+  padding: 24px;
+  background-color: var(--surface-white);
 }
 
 .action-btn {
-  padding: 14px 24px;
+  padding: 16px 24px;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 800;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .cancel-btn {
-  background-color: #e57373;
-  color: white;
+  background-color: var(--background-light);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
 }
 
 .cancel-btn:hover {
-  background-color: #ef5350;
+  background-color: #f1f3f5;
+  color: var(--text-dark);
 }
 
 .add-btn {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   color: white;
+  box-shadow: var(--shadow-md);
 }
 
 .add-btn:hover {
-  background-color: var(--primary-blue-dark);
+  background-color: var(--primary-red-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 .action-btn:active {
-  transform: scale(0.98);
+  transform: translateY(0);
 }
 .option-group{
   margin-bottom: 10px;
@@ -372,12 +433,40 @@ const getCategoryIcon = (categoryId) => {
   padding: 10px;
   text-align: center;
   cursor: pointer;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .option-card.active {
-  border-color: #4fc3f7; 
-  background-color: #f0faff;
+  border-color: var(--primary-red);
+  background-color: #fff5f5;
+  box-shadow: 0 4px 12px rgba(230, 57, 70, 0.1);
 }
+.option-card-info {
+  margin-top: 4px;
+  width: 100%;
+}
+
+.choice-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 2px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  word-break: keep-all;
+}
+
+.choice-price {
+  font-size: 12px;
+  color: #666;
+}
+
 .options-container {
   flex: 1;            
   overflow-y: auto;   

@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
 const router = useRouter()
 
@@ -21,21 +22,24 @@ const logout = () => {
 <template>
   <div class="admin-dashboard">
     <header class="admin-header">
-      <h1>관리자 대시보드</h1>
-      <button @click="logout" class="logout-btn">로그아웃</button>
+      <h1>{{ $t('admin.dashboard_title') }}</h1>
+      <div class="header-right">
+        <LanguageSwitcher mode="inline" variant="dark" />
+        <button @click="logout" class="logout-btn">{{ $t('admin.logout') }}</button>
+      </div>
     </header>
 
     <div class="dashboard-content">
       <div class="dashboard-card" @click="goToMenuManagement">
         <span class="card-icon">🍕</span>
-        <h2>메뉴 관리</h2>
-        <p>메뉴 항목을 추가, 수정, 삭제합니다.</p>
+        <h2>{{ $t('admin.menu_management') }}</h2>
+        <p>{{ $t('admin.menu_desc') }}</p>
       </div>
 
       <div class="dashboard-card" @click="goToSalesStats">
         <span class="card-icon">📊</span>
-        <h2>매출 통계</h2>
-        <p>기간별, 메뉴별 매출 현황을 확인합니다.</p>
+        <h2>{{ $t('admin.sales_stats') }}</h2>
+        <p>{{ $t('admin.sales_desc') }}</p>
       </div>
     </div>
   </div>
@@ -46,38 +50,48 @@ const logout = () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: var(--background-light);
+  color: var(--text-dark);
 }
 
 .admin-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 40px;
-  background-color: var(--primary-blue);
+  padding: 24px 40px;
+  background-color: var(--primary-red-dark);
   color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
 }
 
 .admin-header h1 {
   margin: 0;
   font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .logout-btn {
-  padding: 10px 20px;
-  background-color: #e74c3c;
+  padding: 10px 24px;
+  background-color: rgba(255, 255, 255, 0.1);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .logout-btn:hover {
-  background-color: #c0392b;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: white;
 }
 
 .dashboard-content {
@@ -85,40 +99,53 @@ const logout = () => {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
-  padding: 40px;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 60px 40px;
 }
 
 .dashboard-card {
-  background-color: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  width: 300px;
+  background-color: var(--surface-white);
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  padding: 48px 32px;
+  width: 340px;
+  min-height: 300px;
   text-align: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--border-subtle);
 }
 
 .dashboard-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-12px);
+  border-color: var(--primary-red);
+  box-shadow: 0 20px 40px rgba(230, 57, 70, 0.1);
 }
 
 .card-icon {
-  font-size: 60px;
-  margin-bottom: 20px;
+  font-size: 80px;
+  margin-bottom: 24px;
   display: block;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .dashboard-card h2 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  color: var(--primary-blue);
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--primary-red);
+  letter-spacing: -0.5px;
 }
 
 .dashboard-card p {
   font-size: 16px;
-  color: #666;
+  color: var(--text-muted);
+  line-height: 1.5;
+  font-weight: 500;
 }
 </style>
