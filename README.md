@@ -1,5 +1,11 @@
 # Kiosk Ordering System
 
+![Vue.js](https://img.shields.io/badge/Vue.js-3.5-4FC08D?logo=vue.js&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7.3-646CFF?logo=vite&logoColor=white)
+![Pinia](https://img.shields.io/badge/Pinia-3.0-FFD859?logo=vue.js&logoColor=black)
+![License](https://img.shields.io/badge/License-Private-red)
+![Status](https://img.shields.io/badge/Status-In_Development-yellow)
+
 A Vue 3-based self-service kiosk application for restaurant ordering with admin management capabilities. Built with modern frontend technologies and designed for bilingual (Korean/English) support.
 
 ## Table of Contents
@@ -38,19 +44,25 @@ A Vue 3-based self-service kiosk application for restaurant ordering with admin 
 
 ## Tech Stack
 
-| Category | Technology | Version |
-|----------|------------|---------|
-| Framework | Vue 3 (Composition API) | ^3.5.27 |
-| Build Tool | Vite | ^7.3.1 |
-| State Management | Pinia | ^3.0.4 |
-| Routing | Vue Router | ^4.6.4 |
-| HTTP Client | Axios | ^1.13.4 |
-| Internationalization | Vue I18n | ^11.2.8 |
-| Mock API | JSON Server | ^1.0.0-beta.3 |
-| Dev Tools | Vue DevTools | ^8.0.5 |
+### Core Framework
+![Vue.js](https://img.shields.io/badge/Vue.js-3.5.27-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-7.3.1-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2022-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
-**Runtime Requirements:**
-- Node.js ^20.19.0 or >=22.12.0
+### State & Routing
+![Pinia](https://img.shields.io/badge/Pinia-3.0.4-FFD859?style=for-the-badge&logo=vue.js&logoColor=black)
+![Vue Router](https://img.shields.io/badge/Vue_Router-4.6.4-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+
+### HTTP & API
+![Axios](https://img.shields.io/badge/Axios-1.13.4-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
+![JSON Server](https://img.shields.io/badge/JSON_Server-1.0.0-000000?style=for-the-badge&logo=json&logoColor=white)
+
+### Internationalization
+![Vue I18n](https://img.shields.io/badge/Vue_I18n-11.2.8-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+
+### Development Tools
+![Node.js](https://img.shields.io/badge/Node.js-≥20.19.0-339933?style=for-the-badge&logo=node.js&logoColor=white)
+![npm](https://img.shields.io/badge/npm-Package_Manager-CB3837?style=for-the-badge&logo=npm&logoColor=white)
 
 ## Project Structure
 
@@ -136,18 +148,20 @@ npm run dev:all
 ```
 
 This starts:
-- **Frontend**: http://localhost:5173 (Vite dev server)
-- **API**: http://localhost:3000 (JSON Server)
+| Service | URL | Description |
+|---------|-----|-------------|
+| ![Frontend](https://img.shields.io/badge/Frontend-646CFF?style=flat-square&logo=vite&logoColor=white) | http://localhost:5173 | Vite dev server |
+| ![API](https://img.shields.io/badge/API-000000?style=flat-square&logo=json&logoColor=white) | http://localhost:3000 | JSON Server |
 
 ## Available Scripts
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start Vite development server |
-| `npm run build` | Build for production |
-| `npm run preview` | Preview production build |
-| `npm run server` | Start JSON Server mock API |
-| `npm run dev:all` | Start both frontend and API concurrently |
+| ![dev](https://img.shields.io/badge/npm_run-dev-4FC08D?style=flat-square&logo=npm) | Start Vite development server |
+| ![build](https://img.shields.io/badge/npm_run-build-4FC08D?style=flat-square&logo=npm) | Build for production |
+| ![preview](https://img.shields.io/badge/npm_run-preview-4FC08D?style=flat-square&logo=npm) | Preview production build |
+| ![server](https://img.shields.io/badge/npm_run-server-000000?style=flat-square&logo=npm) | Start JSON Server mock API |
+| ![dev:all](https://img.shields.io/badge/npm_run-dev:all-E63946?style=flat-square&logo=npm) | Start both frontend and API concurrently |
 
 ## Architecture Overview
 
@@ -201,31 +215,42 @@ The `orderStore` manages the global order state:
 The application uses JSON Server as a mock REST API.
 
 ### Categories
-- `GET /categories` - List all categories
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/categories` | List all categories |
 
 ### Menu Items
-- `GET /menuItems` - List all menu items
-- `GET /menuItems?category=<id>` - Filter by category
-- `POST /menuItems` - Create menu item
-- `PUT /menuItems/:id` - Update menu item
-- `DELETE /menuItems/:id` - Delete menu item
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/menuItems` | List all menu items |
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/menuItems?category=<id>` | Filter by category |
+| ![POST](https://img.shields.io/badge/POST-2196F3?style=flat-square) | `/menuItems` | Create menu item |
+| ![PUT](https://img.shields.io/badge/PUT-FF9800?style=flat-square) | `/menuItems/:id` | Update menu item |
+| ![DELETE](https://img.shields.io/badge/DELETE-F44336?style=flat-square) | `/menuItems/:id` | Delete menu item |
 
 ### Orders
-- `GET /orders` - List all orders
-- `POST /orders` - Create new order
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/orders` | List all orders |
+| ![POST](https://img.shields.io/badge/POST-2196F3?style=flat-square) | `/orders` | Create new order |
 
 ### Members
-- `GET /members?phone=<phone>` - Find member by phone
-- `POST /members` - Create new member
-- `PATCH /members/:id` - Update member (points, etc.)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/members?phone=<phone>` | Find member by phone |
+| ![POST](https://img.shields.io/badge/POST-2196F3?style=flat-square) | `/members` | Create new member |
+| ![PATCH](https://img.shields.io/badge/PATCH-9C27B0?style=flat-square) | `/members/:id` | Update member (points, etc.) |
 
 ### Payment & Coupons
-- `GET /paymentMethods` - List payment methods
-- `GET /coupons?code=<code>` - Validate coupon
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/paymentMethods` | List payment methods |
+| ![GET](https://img.shields.io/badge/GET-4CAF50?style=flat-square) | `/coupons?code=<code>` | Validate coupon |
 
 ## Internationalization
 
-The application supports Korean (default) and English.
+![Korean](https://img.shields.io/badge/Korean-Default-E63946?style=flat-square)
+![English](https://img.shields.io/badge/English-Supported-4FC08D?style=flat-square)
 
 ### Configuration
 
@@ -257,13 +282,13 @@ The `LanguageSwitcher` component provides a toggle between Korean and English, a
 
 ### Recommended IDE Setup
 
-- [VS Code](https://code.visualstudio.com/)
-- [Vue Official Extension](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+[![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white)](https://code.visualstudio.com/)
+[![Vue Official](https://img.shields.io/badge/Vue_Official_Extension-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
 ### Browser DevTools
 
-- [Vue.js devtools (Chrome)](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-- [Vue.js devtools (Firefox)](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
+[![Chrome](https://img.shields.io/badge/Vue_DevTools-Chrome-4285F4?style=for-the-badge&logo=google-chrome&logoColor=white)](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
+[![Firefox](https://img.shields.io/badge/Vue_DevTools-Firefox-FF7139?style=for-the-badge&logo=firefox&logoColor=white)](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
 
 ### Environment Variables
 
@@ -317,7 +342,3 @@ The project uses CSS Variables for theming:
 ## License
 
 This project is private and not licensed for public distribution.
-
----
-
-Built with Vue 3 + Vite
