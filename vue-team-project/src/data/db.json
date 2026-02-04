@@ -51,6 +51,93 @@
       }
     }
   ],
+  "combinations": [
+    {
+      "id": "combo_pizza_1",
+      "name": {
+        "ko": "피맥 파티 (성인인증 필수)",
+        "en": "Pizza & Beer Vibe"
+      },
+      "category": "pizza",
+      "description": {
+        "ko": "페퍼로니 피자와 시원한 콜라의 만남!",
+        "en": "Pepperoni Pizza + Cola"
+      },
+      "items": [
+        "1",
+        "11"
+      ],
+      "discountPrice": 500
+    },
+    {
+      "id": "combo_pizza_2",
+      "name": {
+        "ko": "치즈 덕후 세트",
+        "en": "Cheese Lovers"
+      },
+      "category": "pizza",
+      "description": {
+        "ko": "치즈 피자 + 추가 치즈 토핑",
+        "en": "Cheese Pizza + Extra Cheese"
+      },
+      "items": [
+        "2",
+        "11"
+      ],
+      "discountPrice": 1000
+    },
+    {
+      "id": "combo_burger_1",
+      "name": {
+        "ko": "클래식 버거 세트",
+        "en": "Classic Burger Set"
+      },
+      "category": "hamburger",
+      "description": {
+        "ko": "클래식 버거와 콜라의 정석",
+        "en": "Classic Burger + Cola"
+      },
+      "items": [
+        "9",
+        "11"
+      ],
+      "discountPrice": 500
+    },
+    {
+      "id": "combo_burger_2",
+      "name": {
+        "ko": "든든한 한끼",
+        "en": "Full Meal"
+      },
+      "category": "hamburger",
+      "description": {
+        "ko": "더블 치즈 버거 + 사이다",
+        "en": "Double Cheese Burger + Sprite"
+      },
+      "items": [
+        "18",
+        "12"
+      ],
+      "discountPrice": 1000
+    },
+    {
+      "id": "combo_drink_1",
+      "name": {
+        "ko": "탄산 파티",
+        "en": "Soda Party"
+      },
+      "category": "drink",
+      "description": {
+        "ko": "콜라 + 사이다",
+        "en": "Cola + Sprite"
+      },
+      "items": [
+        "11",
+        "12"
+      ],
+      "discountPrice": 200
+    }
+  ],
   "menuItems": [
     {
       "id": "1",
@@ -652,7 +739,7 @@
       },
       "price": 2000,
       "stock": 100,
-      "image": "/src/assets/images/drink/cola.jpeg",
+      "image": "/src/assets/images/drink/cola.png",
       "description": {
         "ko": "코카콜라",
         "en": "Coca Cola"
@@ -1180,7 +1267,7 @@
       },
       "price": 2500,
       "stock": 100,
-      "image": "/src/assets/images/drink/zero_cola.jpeg",
+      "image": "/src/assets/images/drink/zero_cola.png",
       "description": {
         "ko": "제로 칼로리 콜라",
         "en": "Zero calorie cola"

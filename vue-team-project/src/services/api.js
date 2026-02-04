@@ -17,6 +17,10 @@ export const api = {
     })
   },
 
+  async getCombinations() {
+    return axiosInstance.get('/combinations')
+  },
+
   // ============ Payment ============
 
   async getPaymentMethods() {

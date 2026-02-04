@@ -12,7 +12,8 @@ export const translations = {
             processing: '처리중...',
             total: '총',
             use_all: '전액사용',
-            unit_qty: '개'
+            unit_qty: '개',
+            add: '추가'
         },
         order: {
             kiosk: '키오스크',
@@ -29,7 +30,9 @@ export const translations = {
             stock_warning: '품절 임박 ({count}개 남음)',
             sold_out: '품절',
             low_stock_alert: '재고가 부족합니다. (최대 {count}개)',
-            remaining_stock: '남은 수량: {count}개'
+            remaining_stock: '남은 수량: {count}개',
+            honey_combo: '꿀조합 추천',
+            add_combo_confirm: '{name}을(를) 장바구니에 담으시겠습니까?'
         },
         payment: {
             title: '결제 수단 선택',
@@ -199,7 +202,8 @@ export const translations = {
             processing: 'Processing...',
             total: 'Total',
             use_all: 'Use All',
-            unit_qty: 'pcs'
+            unit_qty: 'pcs',
+            add: 'Add'
         },
         order: {
             kiosk: 'KIOSK',
@@ -216,7 +220,9 @@ export const translations = {
             stock_warning: 'Low Stock ({count} left)',
             sold_out: 'SOLD OUT',
             low_stock_alert: 'Insufficient stock. (Max {count} items)',
-            remaining_stock: 'Remaining: {count}'
+            remaining_stock: 'Remaining: {count}',
+            honey_combo: 'Honey Combo Recommendation',
+            add_combo_confirm: 'Add {name} to cart?'
         },
         payment: {
             title: 'Payment Method',
