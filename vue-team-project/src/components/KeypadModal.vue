@@ -2,7 +2,7 @@
 import { ref, watch } from 'vue';
 import VirtualKeypad from './VirtualKeypad.vue';
 
-const props = defineProps(['isOpen', 'title', 'placeholder', 'subtitle', 'maxLimit']);
+const props = defineProps(['isOpen', 'title', 'placeholder', 'subtitle', 'maxLimit', 'type']);
 const emit = defineEmits(['close', 'confirm']);
 
 const inputValue = ref('');
@@ -21,10 +21,10 @@ const onUseAll = () => {
 // };
 const onInput = (val) => { 
   // 번호는 최대 11자까지만 입력되도록 제한 (01012345678)
-  if (props.title.includes('휴대폰') && inputValue.value.length >= 11) return;
+  if (props.type === 'phone' && inputValue.value.length >= 11) return;
   
   // 포인트 입력 시 초기 '0'은 새 숫자로 대체
-  if (props.title.includes('포인트') && inputValue.value === '0') {
+  if (props.type === 'point' && inputValue.value === '0') {
     inputValue.value = val;
   } else {
     inputValue.value += val; 
@@ -32,12 +32,12 @@ const onInput = (val) => {
 };
 const onDelete = () => { 
   inputValue.value = inputValue.value.slice(0, -1); 
-  if (props.title.includes('포인트') && inputValue.value === '') {
+  if (props.type === 'point' && inputValue.value === '') {
     inputValue.value = '0';
   }
 };
 const onClear = () => { 
-  if (props.title.includes('포인트')) {
+  if (props.type === 'point') {
     inputValue.value = '0';
   } else {
     inputValue.value = ''; 
@@ -51,9 +51,9 @@ const handleConfirm = () => {
 // 1. 모달이 열릴 때(isOpen이 true가 될 때) '010' 초기화
 watch(() => props.isOpen, (newVal) => {
   if (newVal) {
-    if (props.title.includes('휴대폰')) {
+    if (props.type === 'phone') {
       inputValue.value = '010';
-    } else if (props.title.includes('포인트')) {
+    } else if (props.type === 'point') {
       inputValue.value = '0'; // 포인트 입력 시 기본값 0
     } else {
       inputValue.value = ''; // 쿠폰 입력 시에는 비움
@@ -63,7 +63,7 @@ watch(() => props.isOpen, (newVal) => {
 
 const formatPhoneNumber = (val) => {
   if (!val) return '';
-  if (!props.title || !props.title.includes('휴대폰')) return val;
+  if (props.type !== 'phone') return val;
   
   let digits = val.replace(/[^0-9]/g, '');
   if (digits.length <= 3) return digits;
@@ -80,12 +80,12 @@ const formatPhoneNumber = (val) => {
         <p v-if="subtitle" class="modal-subtitle">{{ subtitle }}</p>
         <div class="input-container">
           <div class="input-display">{{ formatPhoneNumber(inputValue) || placeholder }}</div>
-          <button v-if="title.includes('포인트') && maxLimit" @click="onUseAll" class="use-all-btn">전액사용</button>
+          <button v-if="type === 'point' && maxLimit" @click="onUseAll" class="use-all-btn">{{ $t('common.use_all') }}</button>
         </div>
         <VirtualKeypad @input="onInput" @delete="onDelete" @clear="onClear" />
         <div class="modal-actions">
-          <button @click="emit('close')">취소</button>
-          <button @click="handleConfirm" class="confirm">확인</button>
+          <button @click="emit('close')">{{ $t('common.cancel') }}</button>
+          <button @click="handleConfirm" class="confirm">{{ $t('common.confirm') }}</button>
         </div>
       </div>
     </div>
@@ -98,71 +98,111 @@ const formatPhoneNumber = (val) => {
         top:0; left:0; 
         width:100%; 
         height:100%; 
-        background:rgba(0,0,0,0.5); 
+        background:rgba(0,0,0,0.7); 
         display:flex; 
         align-items:center; 
         justify-content:center; 
         z-index: 2000; 
+        backdrop-filter: blur(4px);
     }
 
     .modal-content { 
-        background: white; 
-        padding: 20px; 
-        border-radius: 12px; 
-        width: 320px; 
+        background: var(--surface-white); 
+        padding: 32px; 
+        border-radius: 24px; 
+        width: 360px; 
         text-align: center;
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-subtle);
     }
 
     .modal-subtitle {
         font-size: 14px;
-        color: #666;
-        margin-bottom: 10px;
+        color: var(--text-muted);
+        margin-bottom: 12px;
         text-align: right;
+        font-weight: 600;
     }
 
     .input-display { 
         flex: 1;
-        border: 2px solid #4fc3f7; 
-        padding:15px; 
+        border: 2px solid var(--primary-red); 
+        padding:16px; 
         text-align:center; 
-        font-size:24px; 
-        border-radius:8px; 
-        min-height: 60px; 
+        font-size:28px; 
+        border-radius:12px; 
+        min-height: 70px; 
+        background-color: #fff5f5;
+        color: var(--primary-red-dark);
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .input-container {
         display: flex;
-        gap: 10px;
+        gap: 12px;
         align-items: center;
-        margin-bottom: 20px;
+        margin-bottom: 24px;
     }
 
     .use-all-btn {
-        padding: 10px;
-        background: #ffcc00;
+        padding: 0 16px;
+        background: var(--primary-red);
+        color: white;
         border: none;
-        border-radius: 8px;
-        font-weight: bold;
+        border-radius: 12px;
+        font-weight: 800;
         white-space: nowrap;
-        height: 60px;
+        height: 70px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .use-all-btn:hover {
+        background: var(--primary-red-dark);
+        transform: translateY(-2px);
     }
 
     .modal-actions { 
         display:grid; 
-        grid-template-columns: 1fr 1fr; 
-        gap:10px; 
-        margin-top:20px; 
+        grid-template-columns: 1fr 1.5fr; 
+        gap:12px; 
+        margin-top:24px; 
     }
 
     .modal-actions button { 
-        padding: 10px; 
-        border-radius: 8px; 
+        padding: 16px; 
+        border-radius: 12px; 
         border: none; 
-        font-weight: bold; 
+        font-weight: 800; 
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .modal-actions button:not(.confirm) {
+        background: var(--background-light);
+        color: var(--text-muted);
+        border: 1px solid var(--border-subtle);
+    }
+
+    .modal-actions button:not(.confirm):hover {
+        background: #f1f3f5;
+        color: var(--text-dark);
     }
 
     .confirm { 
-        background: #4fc3f7; 
+        background: var(--primary-red); 
         color: white; 
+        box-shadow: var(--shadow-md);
+    }
+
+    .confirm:hover {
+        background: var(--primary-red-dark);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-lg);
     }
 </style>

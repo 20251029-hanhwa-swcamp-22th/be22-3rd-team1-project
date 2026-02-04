@@ -1,17 +1,20 @@
 <script setup>
 import { ref, onMounted, computed, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { orderStore } from '../stores/orderStore'
+import { useOrderStore } from '../stores/orderStore'
 import { api } from '../services/api'
 import OrderCompletionModal from '../components/OrderCompletionModal.vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const router = useRouter()
+const orderStore = useOrderStore()
 
 // 1. 스토어에서 주문 데이터 가져오기
-const paymentMethod = computed(() => orderStore.getSelectedPaymentMethod() || '카드결제')
-const orderItems = computed(() => orderStore.getOrderList())
-const totalPrice = orderStore.getTotalPrice
-const totalDiscount = computed(() => orderStore.getTotalDiscount())
+const paymentMethod = computed(() => orderStore.selectedPaymentMethod || '카드결제')
+const orderItems = computed(() => orderStore.orderList)
+const totalPrice = computed(() => orderStore.calculatedTotalPrice)
+const totalDiscount = computed(() => orderStore.totalDiscount)
 const finalPrice = computed(() => totalPrice.value - totalDiscount.value)
 // 포인트 계산
 const earnedPoints = computed(() => Math.floor(finalPrice.value * 0.05))
@@ -32,19 +35,20 @@ let timerInterval = null
 
 // 3. 결제 수단별 안내 메시지 및 이미지 매핑 (하드코딩)
 const guideInfo = computed(() => {
-  const method = paymentMethod.value
+  const methodObj = paymentMethod.value
+  const method = typeof methodObj === 'object' ? (methodObj.ko || '') : (methodObj || '')
 
   if (method.includes('카드')) {
     return {
-      title: '카드를 투입구에 넣어주세요',
-      subTitle: '결제가 완료될 때까지 카드를 빼지 마세요',
+      title: t('process.card_title'),
+      subTitle: t('process.card_subtitle'),
       image: '/payment/insert_card.gif', // 준비하신 카드 투입 애니메이션 이미지
       bgClass: 'bg-card'
     }
   } else if (method.includes('QR') || method.includes('페이') || method.includes('Easy')) {
     return {
-      title: 'NFC를 리더기에 스캔해주세요',
-      subTitle: '화면 아래 리더기에 NFC를 대주세요',
+      title: t('process.nfc_title'),
+      subTitle: t('process.nfc_subtitle'),
       image: '/payment/scan_nfc.png',
       bgClass: 'bg-qr'
     }
@@ -60,8 +64,8 @@ const guideInfo = computed(() => {
     }
   } */else {
     return {
-      title: '결제를 진행 중입니다',
-      subTitle: '잠시만 기다려주세요',
+      title: t('process.general_title'),
+      subTitle: t('process.general_subtitle'),
       image: '/payment/payment_processing.gif', // 공통 로딩 이미지
       bgClass: 'bg-common'
     }
@@ -98,7 +102,7 @@ const startTimer = () => {
   timerInterval = setInterval(() => {
     timeLeft.value--
     if (timeLeft.value <= 0) {
-      handleFail('시간이 초과되었습니다. 다시 시도해주세요.')
+      handleFail(t('process.timeout'))
     }
   }, 1000)
 }
@@ -134,10 +138,27 @@ const processPayment = async () => {
     // API 호출
     await api.createOrder(orderData)
 
+    // 4. 재고 차감 로직
+    await Promise.all(orderItems.value.map(async (item) => {
+      // item.id가 "1_..." 형태일 수 있으므로 원본 ID 추출
+      const originalId = item.id.toString().split('_')[0]
+      try {
+        const menuItems = await api.getMenuItems()
+        const menuData = menuItems.find(m => m.id === originalId)
+        
+        if (menuData && menuData.stock !== undefined) {
+          const newStock = menuData.stock - item.quantity
+          await api.updateMenuItemStock(originalId, Math.max(0, newStock))
+        }
+      } catch (err) {
+        console.error(`Failed to update stock for item ${originalId}:`, err)
+      }
+    }))
+
     // 회원 포인트 업데이트 로직
-    const currentMember = orderStore.getCurrentMember()
+    const currentMember = orderStore.currentMember
     if (currentMember) {
-      const usedPoints = orderStore.getUsedPoints()
+      const usedPoints = orderStore.usedPoints
       const newPoints = currentMember.points - usedPoints + earnedPoints.value
       await api.updateMember({ ...currentMember, points: newPoints })
       orderStore.setCurrentMember({ ...currentMember, points: newPoints })
@@ -158,7 +179,7 @@ const processPayment = async () => {
 
   } catch (error) {
     console.error('Payment Error:', error)
-    handleFail('결제 시스템 오류가 발생했습니다.')
+    handleFail(t('process.system_error'))
   }
 }
 
@@ -184,7 +205,7 @@ const handleComplete = () => {
 
     <div v-if="processStatus !== 'success'" class="content-container">
       <div class="guide-card">
-        <div class="timer-badge">{{ timeLeft }}초 남음</div>
+        <div class="timer-badge">{{ $t('process.time_left', { time: timeLeft }) }}</div>
 
         <div class="image-area">
           <img :src="guideInfo.image" class="guide-img" alt="가이드 이미지" />
@@ -193,11 +214,11 @@ const handleComplete = () => {
           </div>
         </div>
 
-        <h2 class="title">{{ processStatus === 'processing' ? '결제 승인 중...' : guideInfo.title }}</h2>
+        <h2 class="title">{{ processStatus === 'processing' ? $t('process.approving') : guideInfo.title }}</h2>
         <p class="subtitle">{{ guideInfo.subTitle }}</p>
 
-        <button class="cancel-btn" @click="handleFail('사용자가 결제를 취소했습니다.')">
-          결제 취소
+        <button class="cancel-btn" @click="handleFail(t('process.user_cancel'))">
+          {{ $t('process.cancel_btn') }}
         </button>
       </div>
     </div>
@@ -208,8 +229,8 @@ const handleComplete = () => {
         :order-number="completedOrderInfo.orderNumber"
         :order-items="completedOrderInfo.items"
         :total-price="completedOrderInfo.totalPrice"
-        :earned-points="orderStore.getCurrentMember() ? earnedPoints : 0"
-        :current-points="orderStore.getCurrentMember()?.points || 0"
+        :earned-points="orderStore.currentMember ? earnedPoints : 0"
+        :current-points="orderStore.currentMember?.points || 0"
         @go-home="handleComplete"
         @complete="handleComplete"
     />
@@ -220,48 +241,53 @@ const handleComplete = () => {
 <style scoped>
 .process-page {
   min-height: 100vh;
-  background-color: #f0f2f5;
+  background-color: var(--background-cream);
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 24px;
 }
 
 .guide-card {
-  background: white;
-  padding: 40px;
-  border-radius: 20px;
+  background: var(--surface-white);
+  padding: 48px;
+  border-radius: 24px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-lg);
   width: 100%;
   max-width: 500px;
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid var(--border-subtle);
 }
 
 .timer-badge {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: #ff5252;
+  top: 24px;
+  right: 24px;
+  background: #dc3545;
   color: white;
-  padding: 5px 12px;
+  padding: 6px 16px;
   border-radius: 20px;
-  font-weight: bold;
+  font-weight: 800;
   font-size: 14px;
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
   animation: pulse 1s infinite;
 }
 
 .image-area {
-  width: 200px;
-  height: 200px;
-  margin: 20px 0;
+  width: 220px;
+  height: 220px;
+  margin: 32px 0;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #fff5f5;
+  border-radius: 50%;
+  padding: 20px;
 }
 
 .guide-img {
@@ -271,36 +297,52 @@ const handleComplete = () => {
 }
 
 .title {
-  font-size: 28px;
-  color: #333;
-  margin-bottom: 10px;
+  font-size: 32px;
+  color: var(--primary-red);
+  margin-bottom: 12px;
   font-weight: 800;
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
 }
 
 .subtitle {
-  font-size: 18px;
-  color: #666;
-  margin-bottom: 40px;
+  font-size: 20px;
+  color: var(--text-muted);
+  margin-bottom: 48px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
 }
 
 .cancel-btn {
-  background-color: #e0e0e0;
-  color: #555;
-  border: none;
-  padding: 15px 40px;
-  border-radius: 10px;
-  font-size: 16px;
-  font-weight: bold;
+  background-color: var(--surface-white);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  padding: 16px 40px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
   cursor: pointer;
   width: 100%;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background-color: var(--background-light);
+  color: var(--text-dark);
 }
 
 /* 로딩 스피너 스타일 */
 .spinner {
-  width: 50px;
-  height: 50px;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid var(--primary-blue, #4fc3f7);
+  width: 60px;
+  height: 60px;
+  border: 6px solid #fff5f5;
+  border-top: 6px solid var(--primary-red);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }

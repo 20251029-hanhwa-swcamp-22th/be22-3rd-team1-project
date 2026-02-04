@@ -8,8 +8,9 @@ const currentImageIndex = ref(1)
 
 // 화면보호기 기능추가를위해 가져옴
 import { useRouter } from 'vue-router'
-import { orderStore } from '../stores/orderStore'
+import { useOrderStore } from '../stores/orderStore'
 const router = useRouter()
+const orderStore = useOrderStore()
 
 let activationTimer = null
 let slideshowInterval = null
@@ -95,8 +96,8 @@ onUnmounted(() => {
       />
 
       <div class="text-container">
-        <h1 class="animate-pulse">터치하여 주문하기</h1>
-        <p>Touch screen to order</p>
+        <h1 class="animate-pulse">{{ $t('screensaver.touch_to_order') }}</h1>
+        <p>{{ $t('screensaver.touch_screen') }}</p>
       </div>
     </div>
   </Transition>

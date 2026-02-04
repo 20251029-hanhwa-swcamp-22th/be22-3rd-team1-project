@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router'
+import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 
 const router = useRouter()
 
@@ -16,16 +17,17 @@ const goToAdmin = () => {
 
 <template>
   <div class="main-page">
+    <LanguageSwitcher />
     <!-- Admin Button -->
     <button class="admin-btn" @click="goToAdmin">
-      관리자 페이지 이동
+      {{ $t('main.admin_btn') }}
     </button>
 
     <!-- Background Area -->
     <div class="background-area">
       <div class="welcome-text">
-        <h1>환영합니다</h1>
-        <p>주문 방식을 선택해 주세요</p>
+        <h1>{{ $t('main.welcome') }}</h1>
+        <p>{{ $t('main.select_method') }}</p>
       </div>
     </div>
 
@@ -36,7 +38,7 @@ const goToAdmin = () => {
         @click="selectDiningOption('forHere')"
       >
         <span class="dining-icon">🍽️</span>
-        <span class="dining-text">매장</span>
+        <span class="dining-text">{{ $t('main.for_here') }}</span>
         <span class="dining-subtitle">For Here</span>
       </button>
 
@@ -45,7 +47,7 @@ const goToAdmin = () => {
         @click="selectDiningOption('toGo')"
       >
         <span class="dining-icon">🛍️</span>
-        <span class="dining-text">포장</span>
+        <span class="dining-text">{{ $t('main.to_go') }}</span>
         <span class="dining-subtitle">To Go</span>
       </button>
     </div>
@@ -57,29 +59,31 @@ const goToAdmin = () => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(180deg, var(--surface-white) 0%, var(--background-cream) 100%);
   position: relative;
-  padding: 20px;
+  padding: 24px;
 }
 
 .admin-btn {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  padding: 10px 16px;
-  background-color: var(--primary-blue);
-  color: white;
-  border: none;
+  top: 24px;
+  left: 24px;
+  padding: 10px 20px;
+  background-color: var(--surface-white);
+  color: var(--primary-red);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;
   z-index: 10;
+  box-shadow: var(--shadow-sm);
 }
 
 .admin-btn:hover {
-  background-color: var(--primary-blue-dark);
+  background-color: var(--background-cream);
+  border-color: var(--primary-red);
   transform: translateY(-2px);
 }
 
@@ -88,32 +92,38 @@ const goToAdmin = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 60px 20px;
 }
 
 .welcome-text {
   text-align: center;
-  color: white;
+  color: var(--text-navy);
 }
 
 .welcome-text h1 {
-  font-size: 48px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  font-size: 56px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  color: var(--primary-red);
+  letter-spacing: -2px;
 }
 
 .welcome-text p {
-  font-size: 20px;
-  opacity: 0.9;
+  font-size: 24px;
+  color: var(--text-muted);
+  font-weight: 500;
 }
 
 .dining-options {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  padding: 20px;
-  margin-bottom: 40px;
+  gap: 32px;
+  padding: 24px;
+  margin-bottom: 60px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }
 
 .dining-btn {
@@ -121,47 +131,49 @@ const goToAdmin = () => {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 32px 24px;
-  border: none;
-  border-radius: 16px;
+  padding: 40px;
+  min-height: 280px;
+  border: 2px solid transparent;
+  border-radius: 24px;
+  background-color: var(--surface-white);
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-lg);
 }
 
 .dining-btn:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transform: translateY(-12px);
+  border-color: var(--primary-red);
+  box-shadow: 0 20px 40px rgba(230, 57, 70, 0.15);
 }
 
-.dining-btn:active {
-  transform: translateY(-2px);
-}
-
-.for-here {
-  background: linear-gradient(145deg, #4fc3f7, #29b6f6);
-}
-
-.to-go {
-  background: linear-gradient(145deg, #81d4fa, #4fc3f7);
+.for-here, .to-go {
+  background: var(--surface-white);
 }
 
 .dining-icon {
-  font-size: 48px;
-  margin-bottom: 12px;
+  font-size: 64px;
+  margin-bottom: 24px;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .dining-text {
-  font-size: 28px;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 4px;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-navy);
+  margin-bottom: 8px;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .dining-subtitle {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
+  font-size: 16px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 /* Responsive adjustments */

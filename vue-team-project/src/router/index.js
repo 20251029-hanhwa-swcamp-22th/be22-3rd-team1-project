@@ -9,7 +9,6 @@ import AdminLoginPage from '../views/AdminLoginPage.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
 import AdminMenuManagement from '../views/AdminMenuManagement.vue'
 import AdminSalesStats from '../views/AdminSalesStats.vue'
-
 import PaymentProcessView from '../views/PaymentProcessView.vue'
 import PaymentFailView from '../views/PaymentFailView.vue'
 

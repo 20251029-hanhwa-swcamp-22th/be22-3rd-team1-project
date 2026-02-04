@@ -1,129 +1,108 @@
-const API_BASE_URL = 'http://localhost:3000'
+import axiosInstance from './axios'
 
 export const api = {
+  // ============ Menu & Categories ============
 
   async getCategories() {
-    const response = await fetch(`${API_BASE_URL}/categories`)
-    return response.json()
+    return axiosInstance.get('/categories')
   },
 
   async getMenuItems() {
-    const response = await fetch(`${API_BASE_URL}/menuItems`)
-    return response.json()
+    return axiosInstance.get('/menuItems')
   },
 
   async getMenuItemsByCategory(category) {
-    const response = await fetch(`${API_BASE_URL}/menuItems?category=${category}`)
-    return response.json()
+    return axiosInstance.get('/menuItems', {
+      params: { category }
+    })
   },
+
+  // ============ Payment ============
 
   async getPaymentMethods() {
-    const response = await fetch(`${API_BASE_URL}/paymentMethods`)
-    return response.json()
+    return axiosInstance.get('/paymentMethods')
   },
 
+  // ============ Orders ============
+
   async createOrder(orderData) {
-    const response = await fetch(`${API_BASE_URL}/orders`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(orderData)
-    })
-    return response.json()
+    return axiosInstance.post('/orders', orderData)
   },
 
   async getOrders() {
-    const response = await fetch(`${API_BASE_URL}/orders`)
-    return response.json()
+    return axiosInstance.get('/orders')
   },
+
+  // ============ Members ============
 
   async getMemberByPhone(phone) {
-    const response = await fetch(`${API_BASE_URL}/members?phone=${phone}`)
-    return response.json()
-  },
-
-  async getCouponByCode(code) {
-    const response = await fetch(`${API_BASE_URL}/coupons?code=${code}`)
-    return response.json()
+    return axiosInstance.get('/members', {
+      params: { phone }
+    })
   },
 
   async createMember(memberData) {
-    const response = await fetch(`${API_BASE_URL}/members`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(memberData)
-    })
-    return response.json()
-  },
-
-  // --- 관리자 모드 API 추가 ---
-
-  async adminLogin(credentials) {
-    // 실제 백엔드에서는 비밀번호를 해싱하여 비교해야 합니다.
-    // JSON Server는 간단한 목업이므로, 여기서는 users 엔드포인트에서 사용자 정보를 가져와 비교합니다.
-    const response = await fetch(`${API_BASE_URL}/users?username=${credentials.username}&password=${credentials.password}`)
-    const users = await response.json()
-    if (users.length > 0) {
-      // 로그인 성공, 첫 번째 사용자 정보를 반환 (토큰 등 추가 가능)
-      return { success: true, user: users[0] }
-    } else {
-      return { success: false, message: 'Invalid credentials' }
-    }
-  },
-
-  async getAdminMenuItems() {
-    // 관리자용 메뉴 목록 (필요하다면 일반 사용자용과 다르게 구현)
-    const response = await fetch(`${API_BASE_URL}/menuItems`)
-    return response.json()
-  },
-
-  async createMenuItem(menuItemData) {
-    const response = await fetch(`${API_BASE_URL}/menuItems`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(menuItemData)
-    })
-    return response.json()
+    return axiosInstance.post('/members', memberData)
   },
 
   async updateMember(memberData) {
-    const response = await fetch(`${API_BASE_URL}/members/${memberData.id}`, {
+    return axiosInstance.patch(`/members/${memberData.id}`, memberData)
+  },
+
+  // ============ Coupons ============
+
+  async getCouponByCode(code) {
+    return axiosInstance.get('/coupons', {
+      params: { code }
+    })
+  },
+
+  // ============ Admin APIs ============
+
+  async adminLogin(credentials) {
+    // Note: In production, use POST with credentials in "body"
+    const users = await axiosInstance.get('/users', {
+      params: {
+        username: credentials.username,
+        password: credentials.password
+      }
+    })
+
+    if (users.length > 0) {
+      return { success: true, user: users[0] }
+    }
+    return { success: false, message: 'Invalid credentials' }
+  },
+
+  async getAdminMenuItems() {
+    return axiosInstance.get('/menuItems')
+  },
+
+  async createMenuItem(menuItemData) {
+    return axiosInstance.post('/menuItems', menuItemData)
+  },
+
+  async updateMenuItem(id, menuItemData) {
+    return axiosInstance.put(`/menuItems/${id}`, menuItemData)
+  },
+
+  // 재고 업데이트 함수 추가
+  async updateMenuItemStock(id, newStock) {
+    const response = await fetch(`${API_BASE_URL}/menuItems/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(memberData)
-    })
-    return response.json()
-  },
-
-  async updateMenuItem(id, menuItemData) {
-    const response = await fetch(`${API_BASE_URL}/menuItems/${id}`, {
-      method: 'PUT', // 또는 PATCH
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(menuItemData)
+      body: JSON.stringify({ stock: newStock })
     })
     return response.json()
   },
 
   async deleteMenuItem(id) {
-    const response = await fetch(`${API_BASE_URL}/menuItems/${id}`, {
-      method: 'DELETE'
-    })
-    return response.json()
+    return axiosInstance.delete(`/menuItems/${id}`)
   },
 
   async getSalesStatistics() {
-    // 모든 주문 데이터를 가져와서 클라이언트에서 통계 처리
-    // 실제 백엔드에서는 서버에서 통계 데이터를 가공하여 제공하는 것이 효율적입니다.
-    const response = await fetch(`${API_BASE_URL}/orders`)
-    return response.json()
+    return axiosInstance.get('/orders')
   }
 }
