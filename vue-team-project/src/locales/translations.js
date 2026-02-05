@@ -127,7 +127,10 @@ export const translations = {
         },
         screensaver: {
             touch_to_order: '터치하여 주문하기',
-            touch_screen: 'Touch screen to order'
+            touch_screen: 'Touch screen to order',
+            return_to_main: '메인화면으로 돌아갑니다',
+            continue_order: '계속 주문하시려면 화면을 터치하세요',
+            return_countdown: '초 후'
         },
         discount: {
             coupon: '쿠폰 등록',
@@ -317,7 +320,11 @@ export const translations = {
         },
         screensaver: {
             touch_to_order: 'Touch to Order',
-            touch_screen: 'Touch screen to order'
+            touch_screen: 'Touch screen to order',
+            return_to_main: 'Return to Main',
+            continue_order: 'Continue Order',
+            return_countdown: 'seconds left',
+
         },
         discount: {
             coupon: 'Coupon',
