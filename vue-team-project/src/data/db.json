@@ -51,6 +51,93 @@
       }
     }
   ],
+  "combinations": [
+    {
+      "id": "combo_pizza_1",
+      "name": {
+        "ko": "피맥 파티 (성인인증 필수)",
+        "en": "Pizza & Beer Vibe"
+      },
+      "category": "pizza",
+      "description": {
+        "ko": "페퍼로니 피자와 시원한 콜라의 만남!",
+        "en": "Pepperoni Pizza + Cola"
+      },
+      "items": [
+        "1",
+        "11"
+      ],
+      "discountPrice": 500
+    },
+    {
+      "id": "combo_pizza_2",
+      "name": {
+        "ko": "치즈 덕후 세트",
+        "en": "Cheese Lovers"
+      },
+      "category": "pizza",
+      "description": {
+        "ko": "치즈 피자 + 추가 치즈 토핑",
+        "en": "Cheese Pizza + Extra Cheese"
+      },
+      "items": [
+        "2",
+        "11"
+      ],
+      "discountPrice": 1000
+    },
+    {
+      "id": "combo_burger_1",
+      "name": {
+        "ko": "클래식 버거 세트",
+        "en": "Classic Burger Set"
+      },
+      "category": "hamburger",
+      "description": {
+        "ko": "클래식 버거와 콜라의 정석",
+        "en": "Classic Burger + Cola"
+      },
+      "items": [
+        "9",
+        "11"
+      ],
+      "discountPrice": 500
+    },
+    {
+      "id": "combo_burger_2",
+      "name": {
+        "ko": "든든한 한끼",
+        "en": "Full Meal"
+      },
+      "category": "hamburger",
+      "description": {
+        "ko": "더블 치즈 버거 + 사이다",
+        "en": "Double Cheese Burger + Sprite"
+      },
+      "items": [
+        "18",
+        "12"
+      ],
+      "discountPrice": 1000
+    },
+    {
+      "id": "combo_drink_1",
+      "name": {
+        "ko": "탄산 파티",
+        "en": "Soda Party"
+      },
+      "category": "drink",
+      "description": {
+        "ko": "콜라 + 사이다",
+        "en": "Cola + Sprite"
+      },
+      "items": [
+        "11",
+        "12"
+      ],
+      "discountPrice": 200
+    }
+  ],
   "menuItems": [
     {
       "id": "1",
@@ -652,7 +739,7 @@
       },
       "price": 2000,
       "stock": 100,
-      "image": "/src/assets/images/drink/cola.jpeg",
+      "image": "/src/assets/images/drink/cola.png",
       "description": {
         "ko": "코카콜라",
         "en": "Coca Cola"
@@ -1180,7 +1267,7 @@
       },
       "price": 2500,
       "stock": 100,
-      "image": "/src/assets/images/drink/zero_cola.jpeg",
+      "image": "/src/assets/images/drink/zero_cola.png",
       "description": {
         "ko": "제로 칼로리 콜라",
         "en": "Zero calorie cola"
@@ -2234,13 +2321,53 @@
       "status": "completed"
     },
     {
-      "id": "3521",
-      "orderNumber": "ORD-20260204092052-0621",
+      "id": "fb23",
+      "orderNumber": "ORD-20260205003515-5897",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "35_{}",
+          "name": {
+            "ko": "치즈 스틱",
+            "en": "Cheese Sticks"
+          },
+          "price": 4500,
+          "quantity": 5
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 24500,
+      "createdAt": "2026-02-05T00:35:15.901Z",
+      "status": "completed"
+    },
+    {
+      "id": "7437",
+      "orderNumber": "ORD-20260205004839-2952",
       "paymentMethod": {
         "ko": "카드결제",
         "en": "Credit Card"
       },
       "items": [
+        {
+          "id": "4_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "하와이안 피자 (레귤러)",
+            "en": "Hawaiian Pizza (Regular)"
+          },
+          "price": 16000,
+          "quantity": 2
+        },
         {
           "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
           "name": {
@@ -2249,120 +2376,19 @@
           },
           "price": 19000,
           "quantity": 1
-        }
-      ],
-      "totalPrice": 19000,
-      "createdAt": "2026-02-04T09:20:52.339Z",
-      "status": "completed"
-    },
-    {
-      "id": "b20a",
-      "orderNumber": "ORD-20260204092114-4195",
-      "paymentMethod": {
-        "ko": "카드결제",
-        "en": "Credit Card"
-      },
-      "items": [
+        },
         {
-          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "id": "11_{}",
           "name": {
-            "ko": "고르곤졸라 피자 (레귤러)",
-            "en": "Gorgonzola Pizza (Regular)"
+            "ko": "콜라",
+            "en": "Cola"
           },
-          "price": 19000,
-          "quantity": 2
+          "price": 2000,
+          "quantity": 1
         }
       ],
-      "totalPrice": 38000,
-      "createdAt": "2026-02-04T09:21:14.392Z",
-      "status": "completed"
-    },
-    {
-      "id": "d2f8",
-      "orderNumber": "ORD-20260204092127-2350",
-      "paymentMethod": {
-        "ko": "카드결제",
-        "en": "Credit Card"
-      },
-      "items": [
-        {
-          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
-          "name": {
-            "ko": "고르곤졸라 피자 (레귤러)",
-            "en": "Gorgonzola Pizza (Regular)"
-          },
-          "price": 19000,
-          "quantity": 2
-        }
-      ],
-      "totalPrice": 38000,
-      "createdAt": "2026-02-04T09:21:27.121Z",
-      "status": "completed"
-    },
-    {
-      "id": "fc17",
-      "orderNumber": "ORD-20260204092318-5395",
-      "paymentMethod": {
-        "ko": "삼성페이",
-        "en": "Samsung Pay"
-      },
-      "items": [
-        {
-          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
-          "name": {
-            "ko": "콤비네이션 피자 (레귤러)",
-            "en": "Combination Pizza (Regular)"
-          },
-          "price": 18000,
-          "quantity": 2
-        }
-      ],
-      "totalPrice": 36000,
-      "createdAt": "2026-02-04T09:23:18.578Z",
-      "status": "completed"
-    },
-    {
-      "id": "b053",
-      "orderNumber": "ORD-20260204092507-6873",
-      "paymentMethod": {
-        "ko": "카드결제",
-        "en": "Credit Card"
-      },
-      "items": [
-        {
-          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
-          "name": {
-            "ko": "콤비네이션 피자 (레귤러)",
-            "en": "Combination Pizza (Regular)"
-          },
-          "price": 18000,
-          "quantity": 2
-        }
-      ],
-      "totalPrice": 36000,
-      "createdAt": "2026-02-04T09:25:07.987Z",
-      "status": "completed"
-    },
-    {
-      "id": "dd9d",
-      "orderNumber": "ORD-20260204092525-8484",
-      "paymentMethod": {
-        "ko": "카드결제",
-        "en": "Credit Card"
-      },
-      "items": [
-        {
-          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
-          "name": {
-            "ko": "콤비네이션 피자 (레귤러)",
-            "en": "Combination Pizza (Regular)"
-          },
-          "price": 18000,
-          "quantity": 2
-        }
-      ],
-      "totalPrice": 36000,
-      "createdAt": "2026-02-04T09:25:25.881Z",
+      "totalPrice": 53000,
+      "createdAt": "2026-02-05T00:48:39.379Z",
       "status": "completed"
     }
   ],
@@ -2395,16 +2421,6 @@
     {
       "id": "acec",
       "phone": "01051112236",
-      "points": 0
-    },
-    {
-      "id": "7c75",
-      "phone": "01090311339",
-      "points": 0
-    },
-    {
-      "id": "ffa5",
-      "phone": "01090311339",
       "points": 0
     }
   ],

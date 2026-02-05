@@ -474,7 +474,7 @@ const finalPrice = computed(() => totalPrice.value - totalDiscount.value)
 const earnedPoints = computed(() => Math.floor(finalPrice.value * 0.05))
 
 const handleCancel = () => {
-  router.push('/order')
+  router.push({name:'Order'})
 }
 
 

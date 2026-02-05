@@ -85,8 +85,8 @@ onUnmounted(() => {
         </div>
 
         <div class="text-container">
-          <h1 class="animate-pulse">터치하여 주문하기</h1>
-          <p>Touch screen to order</p>
+          <h1 class="animate-pulse">{{$t('screensaver.touch_to_order')}}</h1>
+          <p>{{$t('screensaver.touch_screen')}}</p>
         </div>
       </div>
 
@@ -97,10 +97,10 @@ onUnmounted(() => {
 
         <div class="text-container">
           <p class="return-text">
-            <span class="highlight">{{ returnCountdown }}</span>초 후<br>
-            메인화면으로 돌아갑니다
+            <span class="highlight">{{ returnCountdown }}&nbsp</span>{{$t('screensaver.return_countdown')}}<br>
+            {{$t('screensaver.return_to_main')}}
           </p>
-          <p class="sub-text">계속 주문하시려면 화면을 터치하세요</p>
+          <p class="sub-text">{{$t('screensaver.continue_order')}}</p>
         </div>
       </div>
 

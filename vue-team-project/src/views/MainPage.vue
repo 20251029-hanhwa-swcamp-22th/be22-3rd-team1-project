@@ -6,12 +6,12 @@ const router = useRouter()
 
 const selectDiningOption = (option) => {
   // Navigate to order page (business logic will be added later)
-  router.push('/order')
+  router.push({name:'Order'})
 }
 
 const goToAdmin = () => {
   // Admin navigation (business logic will be added later)
-  router.push('/admin/login') // 관리자 로그인 페이지로 이동
+  router.push({name:'AdminLogin'}) // 관리자 로그인 페이지로 이동
 }
 </script>
 

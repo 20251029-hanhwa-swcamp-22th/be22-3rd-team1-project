@@ -5,17 +5,17 @@ import LanguageSwitcher from '../components/LanguageSwitcher.vue'
 const router = useRouter()
 
 const goToMenuManagement = () => {
-  router.push('/admin/menu')
+  router.push({name:'AdminMenuManagement'})
 }
 
 const goToSalesStats = () => {
-  router.push('/admin/sales')
+  router.push({name:'AdminSalesStats'})
 }
 
 const logout = () => {
   // TODO: 실제 구현 시, 인증 상태를 초기화하고 로그인 페이지로 리다이렉트
   console.log('Admin logged out')
-  router.push('/admin/login')
+  router.push({name:'AdminLogin'})
 }
 </script>
 

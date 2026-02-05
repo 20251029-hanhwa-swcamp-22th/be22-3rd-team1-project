@@ -182,7 +182,7 @@ const deleteMenuItem = async (id) => {
 }
 
 const goToDashboard = () => {
-  router.push('/admin')
+  router.push({name:'AdminDashboard'})
 }
 </script>
 

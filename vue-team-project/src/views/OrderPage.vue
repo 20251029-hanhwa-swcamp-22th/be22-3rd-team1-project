@@ -15,18 +15,22 @@ const orderStore = useOrderStore()
 // Data fetched from JSON Server
 const categories = ref([])
 const menuItems = ref([])
+const combinations = ref([])
 const activeCategory = ref('pizza')
 const isLoading = ref(true)
+const upsellItems = ref([]) // Stores complementary items to recommend
 
 // Fetch data on component mount
 onMounted(async () => {
   try {
-    const [categoriesData, menuItemsData] = await Promise.all([
+    const [categoriesData, menuItemsData, combinationsData] = await Promise.all([
       api.getCategories(),
-      api.getMenuItems()
+      api.getMenuItems(),
+      api.getCombinations()
     ])
     categories.value = categoriesData
     menuItems.value = menuItemsData
+    combinations.value = combinationsData
     if (categoriesData.length > 0) {
       activeCategory.value = categoriesData[0].id
     }
@@ -45,6 +49,10 @@ const filteredMenuItems = computed(() => {
   return menuItems.value.filter(item => item.category === activeCategory.value)
 })
 
+const activeCombinations = computed(() => {
+  return combinations.value.filter(combo => combo.category === activeCategory.value)
+})
+
 const totalPages = computed(() => {
   return Math.ceil(filteredMenuItems.value.length / itemsPerPage)
 })
@@ -58,6 +66,7 @@ const paginatedMenuItems = computed(() => {
 const selectCategory = (categoryId) => {
   activeCategory.value = categoryId
   currentPage.value = 0
+  upsellItems.value = [] // Reset upsell when changing category
 }
 
 const prevPage = () => {
@@ -100,16 +109,16 @@ const addToOrder = (orderData) => {
   const optionLabelsKo = [];
   const optionLabelsEn = [];
   let optionsPriceSum = 0;
-  
+
   if (orderData.selectedOptions && orderData.options) {
     Object.entries(orderData.selectedOptions).forEach(([groupName, value]) => {
       const optionGroup = orderData.options.find(opt => {
         const optNameKo = typeof opt.name === 'object' ? opt.name.ko : opt.name;
         return optNameKo === groupName || opt.name === groupName;
       });
-      
+
       if (!optionGroup) return;
-      
+
       if (Array.isArray(value)) {
         value.forEach(label => {
           // label is the localized label string passed from MenuInfoModal
@@ -118,7 +127,7 @@ const addToOrder = (orderData) => {
             const choiceLabelEn = typeof c.label === 'object' ? c.label.en : '';
             return choiceLabelKo === label || choiceLabelEn === label || c.label === label;
           });
-          
+
           if (choice) {
             optionsPriceSum += choice.price;
             optionLabelsKo.push(typeof choice.label === 'object' ? choice.label.ko : choice.label);
@@ -131,7 +140,7 @@ const addToOrder = (orderData) => {
           const choiceLabelEn = typeof c.label === 'object' ? c.label.en : '';
           return choiceLabelKo === value || choiceLabelEn === value || c.label === value;
         });
-        
+
         if (choice) {
           optionsPriceSum += choice.price;
           optionLabelsKo.push(typeof choice.label === 'object' ? choice.label.ko : choice.label);
@@ -140,22 +149,58 @@ const addToOrder = (orderData) => {
       }
     });
   }
-  
+
   const optionStringKo = optionLabelsKo.length > 0 ? ` (${optionLabelsKo.join(', ')})` : '';
   const optionStringEn = optionLabelsEn.length > 0 ? ` (${optionLabelsEn.join(', ')})` : '';
-  
+
   // 2. 가공된 주문 데이터 준비
   const processedItem = {
     ...orderData,
-    id: `${orderData.id}_${JSON.stringify(orderData.selectedOptions)}`, 
+    id: `${orderData.id}_${JSON.stringify(orderData.selectedOptions)}`,
     name: {
       ko: `${typeof orderData.name === 'object' ? orderData.name.ko : orderData.name}${optionStringKo}`,
       en: `${typeof orderData.name === 'object' ? orderData.name.en : orderData.name}${optionStringEn}`
     },
-    price: orderData.price + optionsPriceSum, 
+    price: orderData.price + optionsPriceSum,
     quantity: orderData.quantity
   };
   orderStore.addItem(processedItem);
+
+  // Update Upsell Recommendations
+  updateUpsellRecommendations(processedItem.id.split('_')[0]);
+};
+
+
+const updateUpsellRecommendations = (addedItemId) => {
+  // item.id might contain options (id_options), split to get raw ID
+  const rawId = addedItemId.toString().split('_')[0]; 
+  const addedItem = menuItems.value.find(m => m.id === rawId);
+  
+  if (!addedItem) return;
+
+  // Universal Upsell Map
+  const categoryUpsellMap = {
+    'pizza': '11',      // Cola
+    'hamburger': '36',  // French Fries
+    'sandwich': '11',   // Cola
+    'side': '11',       // Cola
+    'drink': '36',      // French Fries
+    'dessert': '1'      // Pepperoni Pizza
+  };
+
+  const targetId = categoryUpsellMap[addedItem.category];
+  
+  if (targetId && targetId !== rawId) {
+    const item = menuItems.value.find(m => m.id === targetId);
+    if (item) {
+      upsellItems.value = [{
+        ...item,
+        comboId: 'category_default'
+      }];
+    }
+  } else {
+    upsellItems.value = [];
+  }
 };
 
 // 수량 증가
@@ -189,15 +234,112 @@ const decreaseItemQuantity = (item) => {
 // 항목 삭제
 const removeItem = (itemId) => {
   orderStore.removeItem(itemId);
+  upsellItems.value = [];
 };
+
+// Add Combo Items
+const addComboToOrder = (combo) => {
+  // Directly add items without confirmation
+  combo.items.forEach(itemId => {
+    const menuItem = menuItems.value.find(item => item.id === itemId)
+    if (menuItem) {
+      // Handle required options (default to first choice if required)
+      let finalPrice = menuItem.price
+      let selectedOptions = {}
+      let optionLabelsKo = []
+      let optionLabelsEn = []
+
+      if (menuItem.options) {
+        menuItem.options.forEach(opt => {
+          if (opt.required && opt.choices && opt.choices.length > 0) {
+            const defaultChoice = opt.choices[0]
+            
+            const optNameKo = typeof opt.name === 'object' ? opt.name.ko : opt.name
+            const choiceLabel = typeof defaultChoice.label === 'object' ? defaultChoice.label.ko : defaultChoice.label
+            
+            selectedOptions[optNameKo] = choiceLabel
+            finalPrice += defaultChoice.price
+            
+            optionLabelsKo.push(typeof defaultChoice.label === 'object' ? defaultChoice.label.ko : defaultChoice.label)
+            optionLabelsEn.push(typeof defaultChoice.label === 'object' ? defaultChoice.label.en : defaultChoice.label)
+          }
+        })
+      }
+
+      const optionStringKo = optionLabelsKo.length > 0 ? ` (${optionLabelsKo.join(', ')})` : ''
+      const optionStringEn = optionLabelsEn.length > 0 ? ` (${optionLabelsEn.join(', ')})` : ''
+
+      const processedItem = {
+        id: `${menuItem.id}_${JSON.stringify(selectedOptions)}`,
+        name: {
+          ko: `${typeof menuItem.name === 'object' ? menuItem.name.ko : menuItem.name}${optionStringKo}`,
+          en: `${typeof menuItem.name === 'object' ? menuItem.name.en : menuItem.name}${optionStringEn}`
+        },
+        price: finalPrice,
+        quantity: 1,
+        image: menuItem.image
+      }
+      orderStore.addItem(processedItem)
+    }
+  })
+}
+
+// Add Upsell Item directly
+const addUpsellItem = (item) => {
+  // Use the same adding logic but for a single item
+  // Default options are applied
+  let finalPrice = item.price
+  let selectedOptions = {}
+  let optionLabelsKo = []
+  let optionLabelsEn = []
+
+  if (item.options) {
+    item.options.forEach(opt => {
+      if (opt.required && opt.choices && opt.choices.length > 0) {
+        const defaultChoice = opt.choices[0]
+
+        const optNameKo = typeof opt.name === 'object' ? opt.name.ko : opt.name
+        const choiceLabel = typeof defaultChoice.label === 'object' ? defaultChoice.label.ko : defaultChoice.label
+
+        selectedOptions[optNameKo] = choiceLabel
+        finalPrice += defaultChoice.price
+
+        optionLabelsKo.push(typeof defaultChoice.label === 'object' ? defaultChoice.label.ko : defaultChoice.label)
+        optionLabelsEn.push(typeof defaultChoice.label === 'object' ? defaultChoice.label.en : defaultChoice.label)
+      }
+    })
+  }
+
+  const optionStringKo = optionLabelsKo.length > 0 ? ` (${optionLabelsKo.join(', ')})` : ''
+  const optionStringEn = optionLabelsEn.length > 0 ? ` (${optionLabelsEn.join(', ')})` : ''
+
+  const processedItem = {
+    id: `${item.id}_${JSON.stringify(selectedOptions)}`,
+    name: {
+      ko: `${typeof item.name === 'object' ? item.name.ko : item.name}${optionStringKo}`,
+      en: `${typeof item.name === 'object' ? item.name.en : item.name}${optionStringEn}`
+    },
+    price: finalPrice,
+    quantity: 1,
+    image: item.image
+  }
+
+  orderStore.addItem(processedItem)
+  // Clear upsell or update again?
+  // Maybe keep showing or find upsell for THIS item?
+  // Let's reset to avoid infinite chain or keep it?
+  // User request "When menu is added... show X".
+  // If I add Cola, do I want upsell for Cola? Maybe not.
+  upsellItems.value = []
+}
 
 // Navigation
 const handleCancel = () => {
-  router.push('/')
+  router.push({name:'Main'})
 }
 
 const handlePay = () => {
-  router.push('/payment-method')
+  router.push({name:'PaymentMethod'})
 }
 
 const getCategoryIcon = (categoryId) => {
@@ -226,10 +368,10 @@ const getCategoryIcon = (categoryId) => {
     <!-- Category Navigation -->
     <nav class="category-nav">
       <button
-        v-for="category in categories"
-        :key="category.id"
-        :class="['category-btn', { active: activeCategory === category.id }]"
-        @click="selectCategory(category.id)"
+          v-for="category in categories"
+          :key="category.id"
+          :class="['category-btn', { active: activeCategory === category.id }]"
+          @click="selectCategory(category.id)"
       >
         {{ category.name[locale] || category.name }}
       </button>
@@ -239,12 +381,12 @@ const getCategoryIcon = (categoryId) => {
     <section class="menu-section">
       <div class="menu-grid">
         <button
-          v-for="menu in paginatedMenuItems"
-          :key="menu.id"
-          class="menu-card"
-          :class="{ 'sold-out': (menu.isSoldOut || (menu.stock !== undefined && menu.stock <= 0)) }"
-          :disabled="menu.isSoldOut || (menu.stock !== undefined && menu.stock <= 0)"
-          @click="openMenuModal(menu)"
+            v-for="menu in paginatedMenuItems"
+            :key="menu.id"
+            class="menu-card"
+            :class="{ 'sold-out': (menu.isSoldOut || (menu.stock !== undefined && menu.stock <= 0)) }"
+            :disabled="menu.isSoldOut || (menu.stock !== undefined && menu.stock <= 0)"
+            @click="openMenuModal(menu)"
         >
           <div class="menu-card-image">
             <img v-if="menu.image || menu.imageUrl" :src="menu.image || menu.imageUrl" :alt="menu.name" class="menu-img" />
@@ -266,35 +408,35 @@ const getCategoryIcon = (categoryId) => {
 
         <!-- Empty slots to maintain grid -->
         <div
-          v-for="n in (itemsPerPage - paginatedMenuItems.length)"
-          :key="'empty-' + n"
-          class="menu-card empty"
+            v-for="n in (itemsPerPage - paginatedMenuItems.length)"
+            :key="'empty-' + n"
+            class="menu-card empty"
         ></div>
       </div>
 
       <!-- Pagination -->
       <div class="pagination">
         <button
-          class="page-btn prev"
-          :disabled="currentPage === 0"
-          @click="prevPage"
+            class="page-btn prev"
+            :disabled="currentPage === 0"
+            @click="prevPage"
         >
           {{ $t('common.back') }}
         </button>
 
         <div class="page-dots">
           <span
-            v-for="(page, index) in totalPages"
-            :key="index"
-            :class="['dot', { active: currentPage === index }]"
-            @click="currentPage = index"
+              v-for="(page, index) in totalPages"
+              :key="index"
+              :class="['dot', { active: currentPage === index }]"
+              @click="currentPage = index"
           ></span>
         </div>
 
         <button
-          class="page-btn next"
-          :disabled="currentPage >= totalPages - 1"
-          @click="nextPage"
+            class="page-btn next"
+            :disabled="currentPage >= totalPages - 1"
+            @click="nextPage"
         >
           {{ $t('common.next') }}
         </button>
@@ -309,24 +451,45 @@ const getCategoryIcon = (categoryId) => {
         <span class="header-price">{{ $t('order.price') }}</span>
       </div>
 
+      <!-- Honey Combination Recommendation -->
+      <!-- Honey Combination Recommendation (Context Aware) -->
+      <div v-if="upsellItems.length > 0" class="honey-combo-section">
+        <div class="honey-combo-title">
+          <span>🍯 {{ $t('order.honey_combo') || 'Honey Combo' }}</span>
+        </div>
+
+        <!-- Upsell Mode: Show explicit items (e.g. + Cola) -->
+        <div class="honey-combo-list upsell-mode">
+          <div v-for="item in upsellItems" :key="item.id" class="honey-combo-item upsell-item" @click="addUpsellItem(item)">
+            <div class="combo-info">
+              <!-- Shows "+ Cola (2000won)" -->
+              <span class="combo-name">+ {{ item.name[locale] || item.name }} ({{ item.price.toLocaleString() }}{{ $t('common.won') }})</span>
+            </div>
+            <button class="combo-add-btn">
+              {{ $t('common.add') || 'Add' }}
+            </button>
+          </div>
+        </div>
+      </div>
+
       <div class="order-list-body">
         <div
-          v-for="item in orderList"
-          :key="item.id"
-          class="order-item"
+            v-for="item in orderList"
+            :key="item.id"
+            class="order-item"
         >
           <div class="item-info">
             <span class="item-name">{{ item.name[locale] || item.name }}</span>
             <button class="remove-btn" @click="removeItem(item.id)">✕</button>
           </div>
-          
+
           <div class="item-controls">
             <button class="qty-btn" @click="increaseItemQuantity(item)">+</button>
             <span class="item-qty">{{ item.quantity }}</span>
             <button class="qty-btn" @click="decreaseItemQuantity(item)">-</button>
           </div>
-  
-  <span class="item-price">{{ (item.price * item.quantity).toLocaleString() }}{{ $t('common.won') }}</span>
+
+          <span class="item-price">{{ (item.price * item.quantity).toLocaleString() }}{{ $t('common.won') }}</span>
         </div>
 
         <div v-if="orderList.length === 0" class="empty-order">
@@ -344,15 +507,15 @@ const getCategoryIcon = (categoryId) => {
 
       <div class="action-buttons">
         <button
-          class="action-btn cancel"
-          @click="handleCancel"
+            class="action-btn cancel"
+            @click="handleCancel"
         >
           {{ $t('common.cancel') }}
         </button>
         <button
-          class="action-btn pay"
-          :disabled="orderList.length === 0"
-          @click="handlePay"
+            class="action-btn pay"
+            :disabled="orderList.length === 0"
+            @click="handlePay"
         >
           {{ $t('common.pay') }}
         </button>
@@ -361,11 +524,11 @@ const getCategoryIcon = (categoryId) => {
 
     <!-- Menu Info Modal -->
     <MenuInfoModal
-      v-if="selectedMenu"
-      :menu="selectedMenu"
-      :isOpen="isModalOpen"
-      @close="closeModal"
-      @add="addToOrder"
+        v-if="selectedMenu"
+        :menu="selectedMenu"
+        :isOpen="isModalOpen"
+        @close="closeModal"
+        @add="addToOrder"
     />
   </div>
 </template>
@@ -712,13 +875,93 @@ const getCategoryIcon = (categoryId) => {
 .item-price {
   color: var(--primary-red-dark);
   font-weight: 700;
-} 
+}
 
 .empty-order {
   padding: 24px;
   text-align: center;
   color: #999;
   font-size: 14px;
+}
+
+/* Honey Combo Section */
+.honey-combo-section {
+  background-color: #fff8e1; /* Light yellow background */
+  border-bottom: 1px solid #ffe082;
+  padding: 10px 16px;
+}
+
+.honey-combo-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ff8f00;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.honey-combo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.honey-combo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #ffe082;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.honey-combo-item.upsell-item {
+  background-color: #fffde7;
+  border: 2px dashed #ffb300;
+  padding: 6px 12px;
+}
+
+.honey-combo-item:hover {
+  background-color: #fff3e0;
+  border-color: #ffb300;
+  transform: translateY(-1px);
+}
+
+.combo-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.upsell-item .combo-name {
+  color: #ef6c00;
+  font-size: 14px;
+}
+
+.combo-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #5d4037;
+}
+
+.combo-desc {
+  font-size: 11px;
+  color: #8d6e63;
+  margin-top: 2px;
+}
+
+.combo-add-btn {
+  background-color: #ffb300;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 /* Action Bar */

@@ -179,7 +179,7 @@ const selectMenu = (name) => {
 }
 
 const goToDashboard = () => {
-  router.push('/admin')
+  router.push({name:'AdminDashboard'})
 }
 </script>
 
