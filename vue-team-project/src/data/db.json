@@ -152,7 +152,7 @@
         "en": "Classic pepperoni pizza"
       },
       "category": "pizza",
-      "stock": 12,
+      "stock": 999,
       "options": [
         {
           "name": {
@@ -218,7 +218,7 @@
         "en": "Cheese Pizza"
       },
       "price": 13000,
-      "stock": 4,
+      "stock": 989,
       "image": "/src/assets/images/pizza/cheese.png",
       "description": {
         "ko": "고소한 치즈 피자",
@@ -288,7 +288,7 @@
         "en": "Bulgogi Pizza"
       },
       "price": 17000,
-      "stock": 0,
+      "stock": 1000,
       "image": "/src/assets/images/pizza/boolgogi.png",
       "description": {
         "ko": "한국식 불고기 피자",
@@ -358,7 +358,7 @@
         "en": "Hawaiian Pizza"
       },
       "price": 16000,
-      "stock": 100,
+      "stock": 1000,
       "image": "/src/assets/images/pizza/hawaiian.png",
       "description": {
         "ko": "파인애플 토핑 피자",
@@ -428,7 +428,7 @@
         "en": "Combination Pizza"
       },
       "price": 18000,
-      "stock": 100,
+      "stock": 91,
       "image": "/src/assets/images/pizza/combination.png",
       "description": {
         "ko": "다양한 토핑의 피자",
@@ -498,7 +498,7 @@
         "en": "Gorgonzola Pizza"
       },
       "price": 19000,
-      "stock": 100,
+      "stock": 9995,
       "image": "/src/assets/images/pizza/gorgonzola.png",
       "description": {
         "ko": "블루치즈 피자",
@@ -638,7 +638,7 @@
         "en": "Margherita Pizza"
       },
       "price": 14000,
-      "stock": 100,
+      "stock": 98,
       "image": "/src/assets/images/pizza/margherita.png",
       "description": {
         "ko": "토마토와 바질",
@@ -723,7 +723,7 @@
         "en": "Cheese Burger"
       },
       "price": 9000,
-      "stock": 100,
+      "stock": 78,
       "image": "/src/assets/images/hamburger/cheese_burger.png",
       "description": {
         "ko": "치즈 햄버거",
@@ -738,13 +738,14 @@
         "en": "Cola"
       },
       "price": 2000,
-      "stock": 100,
+      "stock": 0,
       "image": "/src/assets/images/drink/cola.png",
       "description": {
         "ko": "코카콜라",
         "en": "Coca Cola"
       },
-      "category": "drink"
+      "category": "drink",
+      "options": []
     },
     {
       "id": "12",
@@ -753,7 +754,7 @@
         "en": "Sprite"
       },
       "price": 2000,
-      "stock": 100,
+      "stock": 98,
       "image": "/src/assets/images/drink/cider.png",
       "description": {
         "ko": "칠성사이다",
@@ -784,7 +785,7 @@
         "en": "Bacon Burger"
       },
       "price": 10000,
-      "stock": 0,
+      "stock": 1000,
       "image": "/src/assets/images/hamburger/bacon_burger.png",
       "description": {
         "ko": "스모키 베이컨 버거",
@@ -805,21 +806,6 @@
       "description": {
         "ko": "크리스피 치킨 버거",
         "en": "Crispy chicken burger"
-      },
-      "category": "hamburger"
-    },
-    {
-      "id": "16",
-      "name": {
-        "ko": "트러플 버거",
-        "en": "Truffle Burger"
-      },
-      "price": 12000,
-      "stock": 100,
-      "image": "/src/assets/images/hamburger/truffle_burger.png",
-      "description": {
-        "ko": "트러플 소스 프리미엄 버거",
-        "en": "Premium burger with truffle sauce"
       },
       "category": "hamburger"
     },
@@ -875,7 +861,7 @@
         "en": "Hot Spicy Burger"
       },
       "price": 9000,
-      "stock": 100,
+      "stock": 96,
       "image": "/src/assets/images/hamburger/hot_spicy_burger.png",
       "description": {
         "ko": "매콤한 스파이시 버거",
@@ -921,7 +907,7 @@
         "en": "Avocado Sandwich"
       },
       "price": 7500,
-      "stock": 100,
+      "stock": 98,
       "image": "/src/assets/images/sandwich/avocado_sandwich.png",
       "description": {
         "ko": "신선한 아보카도 샌드위치",
@@ -996,7 +982,7 @@
         "en": "Egg Sandwich"
       },
       "price": 5500,
-      "stock": 100,
+      "stock": 98,
       "image": "/src/assets/images/sandwich/egg_sandwich.png",
       "description": {
         "ko": "부드러운 계란 샌드위치",
@@ -1101,7 +1087,7 @@
         "en": "Cheese Sticks"
       },
       "price": 4500,
-      "stock": 100,
+      "stock": 98,
       "image": "/src/assets/images/side/cheese_sticks.png",
       "description": {
         "ko": "모짜렐라 치즈 스틱",
@@ -1116,7 +1102,7 @@
         "en": "French Fries"
       },
       "price": 3500,
-      "stock": 100,
+      "stock": 0,
       "image": "/src/assets/images/side/french_fries.png",
       "description": {
         "ko": "클래식 감자튀김",
@@ -1131,7 +1117,7 @@
         "en": "Chocolate Ice Cream"
       },
       "price": 3500,
-      "stock": 100,
+      "stock": 94,
       "image": "/src/assets/images/dessert/choco_ice_cream.png",
       "description": {
         "ko": "진한 초콜릿 아이스크림",
@@ -1161,7 +1147,7 @@
         "en": "Cheese Cake"
       },
       "price": 5500,
-      "stock": 100,
+      "stock": 0,
       "image": "/src/assets/images/dessert/cheese_cake.png",
       "description": {
         "ko": "부드러운 치즈 케이크",
@@ -1311,7 +1297,7 @@
         "en": "Lemonade"
       },
       "price": 3500,
-      "stock": 100,
+      "stock": 98,
       "image": "/src/assets/images/drink/lemonade.png",
       "description": {
         "ko": "상큼한 레모네이드",
@@ -2492,13 +2478,927 @@
       "totalPrice": 98000,
       "createdAt": "2026-02-05T02:15:49.073Z",
       "status": "completed"
+    },
+    {
+      "id": "ba74",
+      "orderNumber": "ORD-20260205073754-2593",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "1_{\"사이즈\":\"레귤러\",\"추가 토핑\":[\"베이컨\"]}",
+          "name": {
+            "ko": "페퍼로니 피자 (레귤러, 베이컨)",
+            "en": "Pepperoni Pizza (Regular, Bacon)"
+          },
+          "price": 16500,
+          "quantity": 1
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 18500,
+      "createdAt": "2026-02-05T07:37:54.470Z",
+      "status": "completed"
+    },
+    {
+      "id": "529f",
+      "orderNumber": "ORD-20260205073805-3389",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 13000,
+      "createdAt": "2026-02-05T07:38:05.091Z",
+      "status": "completed"
+    },
+    {
+      "id": "f36a",
+      "orderNumber": "ORD-20260205073812-1593",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 50
+        },
+        {
+          "id": "10_{}",
+          "name": {
+            "ko": "치즈 버거",
+            "en": "Cheese Burger"
+          },
+          "price": 9000,
+          "quantity": 20
+        }
+      ],
+      "totalPrice": 1130000,
+      "createdAt": "2026-02-05T07:38:12.137Z",
+      "status": "completed"
+    },
+    {
+      "id": "75c6",
+      "orderNumber": "ORD-20260205073817-3787",
+      "paymentMethod": {
+        "ko": "카카오페이",
+        "en": "Kakao Pay"
+      },
+      "items": [
+        {
+          "id": "4_{\"사이즈\":\"라지\",\"추가 토핑\":[\"베이컨\"]}",
+          "name": {
+            "ko": "하와이안 피자 (라지, 베이컨)",
+            "en": "Hawaiian Pizza (Large, Bacon)"
+          },
+          "price": 19500,
+          "quantity": 1
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 21500,
+      "createdAt": "2026-02-05T07:38:17.198Z",
+      "status": "completed"
+    },
+    {
+      "id": "8d13",
+      "orderNumber": "ORD-20260205073821-0715",
+      "paymentMethod": {
+        "ko": "기타페이",
+        "en": "Other Pay"
+      },
+      "items": [
+        {
+          "id": "8_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "마르게리타 피자 (레귤러)",
+            "en": "Margherita Pizza (Regular)"
+          },
+          "price": 14000,
+          "quantity": 1
+        },
+        {
+          "id": "20_{}",
+          "name": {
+            "ko": "핫 스파이시 버거",
+            "en": "Hot Spicy Burger"
+          },
+          "price": 9000,
+          "quantity": 1
+        },
+        {
+          "id": "49_{}",
+          "name": {
+            "ko": "레모네이드",
+            "en": "Lemonade"
+          },
+          "price": 3500,
+          "quantity": 1
+        },
+        {
+          "id": "28_{}",
+          "name": {
+            "ko": "에그 샌드위치",
+            "en": "Egg Sandwich"
+          },
+          "price": 5500,
+          "quantity": 1
+        },
+        {
+          "id": "35_{}",
+          "name": {
+            "ko": "치즈 스틱",
+            "en": "Cheese Sticks"
+          },
+          "price": 4500,
+          "quantity": 1
+        },
+        {
+          "id": "37_{}",
+          "name": {
+            "ko": "초코 아이스크림",
+            "en": "Chocolate Ice Cream"
+          },
+          "price": 3500,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 40000,
+      "createdAt": "2026-02-05T07:38:21.580Z",
+      "status": "completed"
+    },
+    {
+      "id": "7a40",
+      "orderNumber": "ORD-20260205073831-5055",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (라지)",
+            "en": "Cheese Pizza (Large)"
+          },
+          "price": 15000,
+          "quantity": 3
+        }
+      ],
+      "totalPrice": 45000,
+      "createdAt": "2026-02-05T07:38:31.242Z",
+      "status": "completed"
+    },
+    {
+      "id": "2fec",
+      "orderNumber": "ORD-20260205073833-5036",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "8_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "마르게리타 피자 (레귤러)",
+            "en": "Margherita Pizza (Regular)"
+          },
+          "price": 14000,
+          "quantity": 1
+        },
+        {
+          "id": "20_{}",
+          "name": {
+            "ko": "핫 스파이시 버거",
+            "en": "Hot Spicy Burger"
+          },
+          "price": 9000,
+          "quantity": 1
+        },
+        {
+          "id": "49_{}",
+          "name": {
+            "ko": "레모네이드",
+            "en": "Lemonade"
+          },
+          "price": 3500,
+          "quantity": 1
+        },
+        {
+          "id": "28_{}",
+          "name": {
+            "ko": "에그 샌드위치",
+            "en": "Egg Sandwich"
+          },
+          "price": 5500,
+          "quantity": 1
+        },
+        {
+          "id": "35_{}",
+          "name": {
+            "ko": "치즈 스틱",
+            "en": "Cheese Sticks"
+          },
+          "price": 4500,
+          "quantity": 1
+        },
+        {
+          "id": "37_{}",
+          "name": {
+            "ko": "초코 아이스크림",
+            "en": "Chocolate Ice Cream"
+          },
+          "price": 3500,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 40000,
+      "createdAt": "2026-02-05T07:38:33.830Z",
+      "status": "completed"
+    },
+    {
+      "id": "849a",
+      "orderNumber": "ORD-20260205073845-0614",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 4
+        }
+      ],
+      "totalPrice": 52000,
+      "createdAt": "2026-02-05T07:38:45.299Z",
+      "status": "completed"
+    },
+    {
+      "id": "a251",
+      "orderNumber": "ORD-20260205073938-3572",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "37_{}",
+          "name": {
+            "ko": "초코 아이스크림",
+            "en": "Chocolate Ice Cream"
+          },
+          "price": 3500,
+          "quantity": 4
+        },
+        {
+          "id": "1_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "페퍼로니 피자 (레귤러)",
+            "en": "Pepperoni Pizza (Regular)"
+          },
+          "price": 15000,
+          "quantity": 11
+        }
+      ],
+      "totalPrice": 179000,
+      "createdAt": "2026-02-05T07:39:38.005Z",
+      "status": "completed"
+    },
+    {
+      "id": "a5c2",
+      "orderNumber": "ORD-20260205074010-4969",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 15
+        }
+      ],
+      "totalPrice": 195000,
+      "createdAt": "2026-02-05T07:40:10.302Z",
+      "status": "completed"
+    },
+    {
+      "id": "44eb",
+      "orderNumber": "ORD-20260205074028-5039",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 18000,
+      "createdAt": "2026-02-05T07:40:28.188Z",
+      "status": "completed"
+    },
+    {
+      "id": "3714",
+      "orderNumber": "ORD-20260205074128-0101",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 40
+        }
+      ],
+      "totalPrice": 760000,
+      "createdAt": "2026-02-05T07:41:28.974Z",
+      "status": "completed"
+    },
+    {
+      "id": "9e67",
+      "orderNumber": "ORD-20260205074136-3222",
+      "paymentMethod": {
+        "ko": "토스페이",
+        "en": "Toss Pay"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (라지)",
+            "en": "Combination Pizza (Large)"
+          },
+          "price": 20000,
+          "quantity": 1
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 5
+        },
+        {
+          "id": "6_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (라지)",
+            "en": "Gorgonzola Pizza (Large)"
+          },
+          "price": 21000,
+          "quantity": 1
+        },
+        {
+          "id": "10_{}",
+          "name": {
+            "ko": "치즈 버거",
+            "en": "Cheese Burger"
+          },
+          "price": 9000,
+          "quantity": 1
+        },
+        {
+          "id": "36_{}",
+          "name": {
+            "ko": "감자튀김",
+            "en": "French Fries"
+          },
+          "price": 3500,
+          "quantity": 4
+        },
+        {
+          "id": "20_{}",
+          "name": {
+            "ko": "핫 스파이시 버거",
+            "en": "Hot Spicy Burger"
+          },
+          "price": 9000,
+          "quantity": 1
+        },
+        {
+          "id": "12_{}",
+          "name": {
+            "ko": "사이다",
+            "en": "Sprite"
+          },
+          "price": 2000,
+          "quantity": 1
+        },
+        {
+          "id": "23_{}",
+          "name": {
+            "ko": "아보카도 샌드위치",
+            "en": "Avocado Sandwich"
+          },
+          "price": 7500,
+          "quantity": 1
+        },
+        {
+          "id": "39_{}",
+          "name": {
+            "ko": "치즈 케이크",
+            "en": "Cheese Cake"
+          },
+          "price": 5500,
+          "quantity": 1
+        },
+        {
+          "id": "1_{\"사이즈\":\"레귤러\"}",
+          "name": {
+            "ko": "페퍼로니 피자 (레귤러)",
+            "en": "Pepperoni Pizza (Regular)"
+          },
+          "price": 15000,
+          "quantity": 1
+        },
+        {
+          "id": "4_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "하와이안 피자 (라지)",
+            "en": "Hawaiian Pizza (Large)"
+          },
+          "price": 18000,
+          "quantity": 96
+        }
+      ],
+      "totalPrice": 1841000,
+      "createdAt": "2026-02-05T07:41:36.117Z",
+      "status": "completed"
+    },
+    {
+      "id": "8469",
+      "orderNumber": "ORD-20260205074148-9880",
+      "paymentMethod": {
+        "ko": "토스페이",
+        "en": "Toss Pay"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (라지)",
+            "en": "Combination Pizza (Large)"
+          },
+          "price": 20000,
+          "quantity": 1
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 5
+        },
+        {
+          "id": "6_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (라지)",
+            "en": "Gorgonzola Pizza (Large)"
+          },
+          "price": 21000,
+          "quantity": 1
+        },
+        {
+          "id": "10_{}",
+          "name": {
+            "ko": "치즈 버거",
+            "en": "Cheese Burger"
+          },
+          "price": 9000,
+          "quantity": 1
+        },
+        {
+          "id": "36_{}",
+          "name": {
+            "ko": "감자튀김",
+            "en": "French Fries"
+          },
+          "price": 3500,
+          "quantity": 4
+        },
+        {
+          "id": "20_{}",
+          "name": {
+            "ko": "핫 스파이시 버거",
+            "en": "Hot Spicy Burger"
+          },
+          "price": 9000,
+          "quantity": 1
+        },
+        {
+          "id": "12_{}",
+          "name": {
+            "ko": "사이다",
+            "en": "Sprite"
+          },
+          "price": 2000,
+          "quantity": 1
+        },
+        {
+          "id": "23_{}",
+          "name": {
+            "ko": "아보카도 샌드위치",
+            "en": "Avocado Sandwich"
+          },
+          "price": 7500,
+          "quantity": 1
+        },
+        {
+          "id": "39_{}",
+          "name": {
+            "ko": "치즈 케이크",
+            "en": "Cheese Cake"
+          },
+          "price": 5500,
+          "quantity": 1
+        },
+        {
+          "id": "1_{\"사이즈\":\"레귤러\"}",
+          "name": {
+            "ko": "페퍼로니 피자 (레귤러)",
+            "en": "Pepperoni Pizza (Regular)"
+          },
+          "price": 15000,
+          "quantity": 1
+        },
+        {
+          "id": "4_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "하와이안 피자 (라지)",
+            "en": "Hawaiian Pizza (Large)"
+          },
+          "price": 18000,
+          "quantity": 96
+        }
+      ],
+      "totalPrice": 1841000,
+      "createdAt": "2026-02-05T07:41:48.001Z",
+      "status": "completed"
+    },
+    {
+      "id": "f3c2",
+      "orderNumber": "ORD-20260205074149-8268",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 38000,
+      "createdAt": "2026-02-05T07:41:49.520Z",
+      "status": "completed"
+    },
+    {
+      "id": "9b96",
+      "orderNumber": "ORD-20260205074212-2733",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 19000,
+      "createdAt": "2026-02-05T07:42:12.321Z",
+      "status": "completed"
+    },
+    {
+      "id": "2d75",
+      "orderNumber": "ORD-20260205074227-4951",
+      "paymentMethod": {
+        "ko": "토스페이",
+        "en": "Toss Pay"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 5
+        }
+      ],
+      "totalPrice": 95000,
+      "createdAt": "2026-02-05T07:42:27.086Z",
+      "status": "completed"
+    },
+    {
+      "id": "b1d7",
+      "orderNumber": "ORD-20260205074311-0877",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 2
+        },
+        {
+          "id": "5_{\"사이즈\":\"라지\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (라지)",
+            "en": "Combination Pizza (Large)"
+          },
+          "price": 20000,
+          "quantity": 1
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 88
+        }
+      ],
+      "totalPrice": 232000,
+      "createdAt": "2026-02-05T07:43:11.157Z",
+      "status": "completed"
+    },
+    {
+      "id": "efb9",
+      "orderNumber": "ORD-20260205074652-5830",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "39_{}",
+          "name": {
+            "ko": "치즈 케이크",
+            "en": "Cheese Cake"
+          },
+          "price": 5500,
+          "quantity": 134
+        }
+      ],
+      "totalPrice": 737000,
+      "createdAt": "2026-02-05T07:46:52.502Z",
+      "status": "completed"
+    },
+    {
+      "id": "8803",
+      "orderNumber": "ORD-20260205074701-7876",
+      "paymentMethod": {
+        "ko": "카카오페이",
+        "en": "Kakao Pay"
+      },
+      "items": [
+        {
+          "id": "1_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "페퍼로니 피자 (레귤러)",
+            "en": "Pepperoni Pizza (Regular)"
+          },
+          "price": 15000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 15000,
+      "createdAt": "2026-02-05T07:47:01.883Z",
+      "status": "completed"
+    },
+    {
+      "id": "bc78",
+      "orderNumber": "ORD-20260205074725-2166",
+      "paymentMethod": {
+        "ko": "토스페이",
+        "en": "Toss Pay"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 13000,
+      "createdAt": "2026-02-05T07:47:25.453Z",
+      "status": "completed"
+    },
+    {
+      "id": "d197",
+      "orderNumber": "ORD-20260205074745-5008",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 25082,
+      "createdAt": "2026-02-05T07:47:45.029Z",
+      "status": "completed"
+    },
+    {
+      "id": "2fe9",
+      "orderNumber": "ORD-20260205074749-0005",
+      "paymentMethod": {
+        "ko": "토스페이",
+        "en": "Toss Pay"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 12250,
+      "createdAt": "2026-02-05T07:47:49.544Z",
+      "status": "completed"
+    },
+    {
+      "id": "9f99",
+      "orderNumber": "ORD-20260205074848-0354",
+      "paymentMethod": {
+        "ko": "토스페이",
+        "en": "Toss Pay"
+      },
+      "items": [
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 1000
+        }
+      ],
+      "totalPrice": 2000000,
+      "createdAt": "2026-02-05T07:48:48.422Z",
+      "status": "completed"
+    },
+    {
+      "id": "a068",
+      "orderNumber": "ORD-20260205074855-3548",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 5
+        },
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 5
+        }
+      ],
+      "totalPrice": 183746,
+      "createdAt": "2026-02-05T07:48:55.135Z",
+      "status": "completed"
+    },
+    {
+      "id": "f645",
+      "orderNumber": "ORD-20260205074906-6161",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "2_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "치즈 피자 (레귤러)",
+            "en": "Cheese Pizza (Regular)"
+          },
+          "price": 13000,
+          "quantity": 7
+        },
+        {
+          "id": "36_{}",
+          "name": {
+            "ko": "감자튀김",
+            "en": "French Fries"
+          },
+          "price": 3500,
+          "quantity": 106
+        }
+      ],
+      "totalPrice": 462000,
+      "createdAt": "2026-02-05T07:49:06.608Z",
+      "status": "completed"
     }
   ],
   "members": [
     {
       "id": "1",
       "phone": "01012345678",
-      "points": 918
+      "points": 9187
     },
     {
       "id": "5e3d",
@@ -2544,6 +3444,26 @@
       "id": "a5da",
       "phone": "01079798282",
       "points": 0
+    },
+    {
+      "id": "f11d",
+      "phone": "01057999999",
+      "points": 925
+    },
+    {
+      "id": "8138",
+      "phone": "01057999999",
+      "points": 0
+    },
+    {
+      "id": "d91f",
+      "phone": "01090311339",
+      "points": 23712
+    },
+    {
+      "id": "dc3e",
+      "phone": "01090311339",
+      "points": 1075
     }
   ],
   "coupons": [
