@@ -92,14 +92,8 @@ export const api = {
 
   // 재고 업데이트 함수 추가
   async updateMenuItemStock(id, newStock) {
-    const response = await fetch(`${API_BASE_URL}/menuItems/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ stock: newStock })
-    })
-    return response.json()
+
+    return axiosInstance.patch(`/menuItems/${id}`, { stock: newStock })
   },
 
   async deleteMenuItem(id) {
