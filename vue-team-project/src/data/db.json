@@ -2390,6 +2390,108 @@
       "totalPrice": 53000,
       "createdAt": "2026-02-05T00:48:39.379Z",
       "status": "completed"
+    },
+    {
+      "id": "519c",
+      "orderNumber": "ORD-20260205021107-1448",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 4
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 80000,
+      "createdAt": "2026-02-05T02:11:07.427Z",
+      "status": "completed"
+    },
+    {
+      "id": "7c60",
+      "orderNumber": "ORD-20260205021155-5134",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 4
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 76000,
+      "createdAt": "2026-02-05T02:11:55.740Z",
+      "status": "completed"
+    },
+    {
+      "id": "345e",
+      "orderNumber": "ORD-20260205021549-2324",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "4_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "하와이안 피자 (레귤러)",
+            "en": "Hawaiian Pizza (Regular)"
+          },
+          "price": 16000,
+          "quantity": 5
+        },
+        {
+          "id": "11_{}",
+          "name": {
+            "ko": "콜라",
+            "en": "Cola"
+          },
+          "price": 2000,
+          "quantity": 3
+        },
+        {
+          "id": "33_{}",
+          "name": {
+            "ko": "코울슬로",
+            "en": "Coleslaw"
+          },
+          "price": 3000,
+          "quantity": 4
+        }
+      ],
+      "totalPrice": 98000,
+      "createdAt": "2026-02-05T02:15:49.073Z",
+      "status": "completed"
     }
   ],
   "members": [
@@ -2421,6 +2523,26 @@
     {
       "id": "acec",
       "phone": "01051112236",
+      "points": 0
+    },
+    {
+      "id": "f7cc",
+      "phone": "01085522222",
+      "points": 0
+    },
+    {
+      "id": "f9ab",
+      "phone": "01085522222",
+      "points": 0
+    },
+    {
+      "id": "0786",
+      "phone": "01079798282",
+      "points": 4900
+    },
+    {
+      "id": "a5da",
+      "phone": "01079798282",
       "points": 0
     }
   ],
