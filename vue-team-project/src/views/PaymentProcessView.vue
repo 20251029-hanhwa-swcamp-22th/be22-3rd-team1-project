@@ -76,7 +76,7 @@ const guideInfo = computed(() => {
 onMounted(() => {
   // 주문 내역이 없으면 튕겨내기
   if (orderItems.value.length === 0) {
-    router.replace('/')
+    router.replace({name:'Main'})
     return
   }
 
@@ -196,7 +196,7 @@ const handleFail = (reason) => {
 // 성공 모달에서 "완료" 누르면 홈으로
 const handleComplete = () => {
   orderStore.clearOrder()
-  router.push('/')
+  router.push({name:'Main'})
 }
 </script>
 

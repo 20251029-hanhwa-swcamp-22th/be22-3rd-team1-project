@@ -9,11 +9,11 @@ const failReason = route.query.reason || '알 수 없는 오류가 발생했습�
 
 const goRetry = () => {
   // 다시 결제 수단 선택 화면으로
-  router.push('/payment-method')
+  router.push({name : 'PaymentMethod'})
 }
 
 const goHome = () => {
-  router.push('/')
+  router.push({name:'Main'})
 }
 </script>
 

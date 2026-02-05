@@ -74,4 +74,6 @@ export const useOrderStore = defineStore('order', {
       this.usedPoints = 0
     }
   }
+
+
 })

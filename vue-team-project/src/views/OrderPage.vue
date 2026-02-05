@@ -335,11 +335,11 @@ const addUpsellItem = (item) => {
 
 // Navigation
 const handleCancel = () => {
-  router.push('/')
+  router.push({name:'Main'})
 }
 
 const handlePay = () => {
-  router.push('/payment-method')
+  router.push({name:'PaymentMethod'})
 }
 
 const getCategoryIcon = (categoryId) => {
