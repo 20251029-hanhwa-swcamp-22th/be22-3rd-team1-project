@@ -80,7 +80,7 @@ const selectPayment = (paymentId) => {
 }
 
 const handleBack = () => {
-  router.push('/order')
+  router.push({name:'Order'})
 }
 
 const handleNext = () => {
@@ -101,7 +101,7 @@ const handleNext = () => {
       // 결제 확인 모달 추가
       showMessage('confirm', t('payment.confirm_msg'), t('payment.confirm_proceed', { amount: confirmPrice.value.toLocaleString() }), () => {
         modal.value.isOpen = false;
-        router.push('/payment-confirm')
+        router.push({name:'PaymentConfirm'})
       })
     }
   }
