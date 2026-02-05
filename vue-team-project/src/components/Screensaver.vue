@@ -38,7 +38,7 @@ const reset = () => {
       // 5초마다 이미지 변경
       intervalTimer = setInterval(() => {
         currentImageIndex.value = (currentImageIndex.value % 7) + 1
-      }, 5000)
+      }, 3000)
 
     } else {
       // [모드 2] 복귀 경고

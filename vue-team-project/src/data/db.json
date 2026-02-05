@@ -2143,19 +2143,6 @@
       "status": "completed"
     },
     {
-      "id": "0ce6",
-      "orderNumber": "ORD-20260204063706-1811",
-      "paymentMethod": "삼성페이",
-      "items": [
-        {
-          "id": "5_{\"Size\":\"Regular\",\"Add-ons\":[]}",
-          "name": "콤비네이션 피자 (Regular)",
-          "price": 18000,
-          "quantity": 1
-        }
-      ],
-      "totalPrice": 18000,
-      "createdAt": "2026-02-04T06:37:06.412Z",
       "id": "35f5",
       "orderNumber": "ORD-20260204033601-8774",
       "paymentMethod": "삼성페이",
@@ -2245,6 +2232,138 @@
       "totalPrice": 28000,
       "createdAt": "2026-02-04T06:21:39.005Z",
       "status": "completed"
+    },
+    {
+      "id": "3521",
+      "orderNumber": "ORD-20260204092052-0621",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 1
+        }
+      ],
+      "totalPrice": 19000,
+      "createdAt": "2026-02-04T09:20:52.339Z",
+      "status": "completed"
+    },
+    {
+      "id": "b20a",
+      "orderNumber": "ORD-20260204092114-4195",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 38000,
+      "createdAt": "2026-02-04T09:21:14.392Z",
+      "status": "completed"
+    },
+    {
+      "id": "d2f8",
+      "orderNumber": "ORD-20260204092127-2350",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "6_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "고르곤졸라 피자 (레귤러)",
+            "en": "Gorgonzola Pizza (Regular)"
+          },
+          "price": 19000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 38000,
+      "createdAt": "2026-02-04T09:21:27.121Z",
+      "status": "completed"
+    },
+    {
+      "id": "fc17",
+      "orderNumber": "ORD-20260204092318-5395",
+      "paymentMethod": {
+        "ko": "삼성페이",
+        "en": "Samsung Pay"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 36000,
+      "createdAt": "2026-02-04T09:23:18.578Z",
+      "status": "completed"
+    },
+    {
+      "id": "b053",
+      "orderNumber": "ORD-20260204092507-6873",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 36000,
+      "createdAt": "2026-02-04T09:25:07.987Z",
+      "status": "completed"
+    },
+    {
+      "id": "dd9d",
+      "orderNumber": "ORD-20260204092525-8484",
+      "paymentMethod": {
+        "ko": "카드결제",
+        "en": "Credit Card"
+      },
+      "items": [
+        {
+          "id": "5_{\"사이즈\":\"레귤러\",\"추가 토핑\":[]}",
+          "name": {
+            "ko": "콤비네이션 피자 (레귤러)",
+            "en": "Combination Pizza (Regular)"
+          },
+          "price": 18000,
+          "quantity": 2
+        }
+      ],
+      "totalPrice": 36000,
+      "createdAt": "2026-02-04T09:25:25.881Z",
+      "status": "completed"
     }
   ],
   "members": [
@@ -2269,8 +2388,6 @@
       "points": 5450
     },
     {
-      "id": "a410",
-      "phone": "01037284121",
       "id": "ecd6",
       "phone": "01051112236",
       "points": 1400
@@ -2278,6 +2395,16 @@
     {
       "id": "acec",
       "phone": "01051112236",
+      "points": 0
+    },
+    {
+      "id": "7c75",
+      "phone": "01090311339",
+      "points": 0
+    },
+    {
+      "id": "ffa5",
+      "phone": "01090311339",
       "points": 0
     }
   ],
